@@ -16,7 +16,20 @@
   <div id="app" class="app-shell">
     <section id="loginView" class="login-view">
       <div class="login-card">
-        <img class="logo-img login-logo" src="logo.png" alt="LH Budget">
+        <div class="lh-logo login-lh-logo" aria-label="LH Budget">
+  <svg viewBox="0 0 180 112" role="img">
+    <defs>
+      <linearGradient id="lhGold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ffe08a"/>
+        <stop offset="52%" stop-color="#d9b765"/>
+        <stop offset="100%" stop-color="#a67d2e"/>
+      </linearGradient>
+    </defs>
+    <text x="47" y="66" class="lh-l">L</text>
+    <text x="82" y="78" class="lh-h">H</text>
+    <text x="90" y="104" class="lh-budget">LH BUDGET</text>
+  </svg>
+</div>
         <form id="loginForm" class="login-form">
           <input id="email" type="email" autocomplete="username" placeholder="Brugernavn / email" required />
           <input id="password" type="password" autocomplete="current-password" placeholder="Kode" required />
@@ -24,13 +37,26 @@
           <div id="loginError" class="error"></div>
         </form>
       </div>
-      <div class="version">v3.2</div>
+      <div class="version">v3.3</div>
     </section>
 
     <section id="budgetView" class="budget-view hidden">
       <header class="topbar">
         <button id="menuBtn" class="icon-btn">☰</button>
-        <div class="top-logo"><img class="logo-img top-logo-img" src="logo.png" alt="LH Budget"></div>
+        <div class="top-logo"><div class="lh-logo top-lh-logo" aria-label="LH Budget">
+  <svg viewBox="0 0 180 112" role="img">
+    <defs>
+      <linearGradient id="lhGold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ffe08a"/>
+        <stop offset="52%" stop-color="#d9b765"/>
+        <stop offset="100%" stop-color="#a67d2e"/>
+      </linearGradient>
+    </defs>
+    <text x="47" y="66" class="lh-l">L</text>
+    <text x="82" y="78" class="lh-h">H</text>
+    <text x="90" y="104" class="lh-budget">LH BUDGET</text>
+  </svg>
+</div></div>
         <button id="logoutBtn" class="icon-btn">⎋</button>
       </header>
 
@@ -81,7 +107,7 @@
           <strong id="saldoValue">0</strong>
         </div>
       </footer>
-      <div class="version app-version">v3.2</div>
+      <div class="version app-version">v3.3</div>
     </section>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
