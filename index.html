@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#070707" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LH Budget" />
+  <title>LH Budget</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <section id="loginView" class="login-view">
+      <div class="login-card">
+        <div class="logo-mark">L<span>H</span></div>
+        <div class="brand">LH Budget</div>
+        <form id="loginForm" class="login-form">
+          <input id="email" type="email" autocomplete="username" placeholder="Brugernavn / email" required />
+          <input id="password" type="password" autocomplete="current-password" placeholder="Kode" required />
+          <button type="submit">Log ind</button>
+          <div id="loginError" class="error"></div>
+        </form>
+      </div>
+      <div class="version">v1.3</div>
+    </section>
+
+    <section id="budgetView" class="budget-view hidden">
+      <header class="topbar">
+        <button id="menuBtn" class="icon-btn">☰</button>
+        <div class="top-logo"><div class="logo-mark small">L<span>H</span></div><div>LH Budget</div></div>
+        <button id="logoutBtn" class="icon-btn">⎋</button>
+      </header>
+
+      <main class="screen">
+        <div class="year-row">
+          <span>ÅR</span>
+          <select id="yearSelect"></select>
+        </div>
+        <div class="months-row">
+          <button id="prevMonth" class="month-arrow">‹</button>
+          <div id="monthTabs" class="month-tabs"></div>
+          <button id="nextMonth" class="month-arrow">›</button>
+        </div>
+
+        <section class="panel income-panel">
+          <div class="panel-title">INDTÆGTER</div>
+          <div class="fixed-lines">
+            <div class="line editable"><span>Løn</span><input id="salaryInput" inputmode="decimal" /></div>
+            <div class="line editable"><span id="openingLabel">Lønkonto</span><input id="openingInput" inputmode="decimal" /></div>
+          </div>
+          <div id="incomeList" class="scroll-list compact"></div>
+          <button id="addIncome" class="add-btn">+ Tilføj indtægt</button>
+          <div class="total positive"><span>I ALT</span><strong id="incomeTotal">0</strong></div>
+        </section>
+
+        <section class="panel balance-panel">
+          <div class="panel-title">LØNKONTO MINUS UDGIFTER</div>
+          <div class="fixed-lines">
+            <div class="line"><span>Indtægter</span><strong id="balanceIncome">0</strong></div>
+            <div class="line negative"><span>Udgifter</span><strong id="balanceExpense">0</strong></div>
+          </div>
+          <div id="adjustmentList" class="scroll-list compact"></div>
+          <button id="addAdjustment" class="add-btn">+ Tilføj post</button>
+          <div class="total final"><span>I ALT</span><strong id="balanceTotal">0</strong></div>
+        </section>
+
+        <section class="panel expense-panel">
+          <div class="panel-title">UDGIFTER</div>
+          <div id="expenseList" class="scroll-list expenses"></div>
+          <button id="addExpense" class="add-btn">+ Tilføj udgift</button>
+          <div class="total final"><span>I ALT</span><strong id="expenseTotal">0</strong></div>
+        </section>
+      </main>
+
+      <footer class="bottom">
+        <div class="saldo">
+          <span id="saldoLabel">SALDO VED UDGANG</span>
+          <strong id="saldoValue">0</strong>
+        </div>
+        <div class="version">v1.3</div>
+      </footer>
+    </section>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
