@@ -130,7 +130,7 @@ button,input,select{font:inherit}
   overflow:hidden;
   padding:6px 9px 18px;
   display:grid;
-  grid-template-rows:30px 36px 1.25fr 1.25fr 2.25fr;
+  grid-template-rows:30px 36px 1.6fr 1.6fr 3fr;
   gap:5px;
 }
 
@@ -287,7 +287,7 @@ button,input,select{font:inherit}
 .app-version{
   position:absolute;
   right:8px;
-  bottom:calc(5px + var(--safe-bottom));
+  bottom:calc(1px + var(--safe-bottom));
   font-size:10px;
   color:#746b50;
 }
@@ -299,7 +299,7 @@ button,input,select{font:inherit}
   .top-logo{font-size:12px}
   .screen{
     height:calc(100dvh - var(--safe-top) - 54px);
-    grid-template-rows:28px 34px 1.15fr 1.15fr 2.1fr;
+    grid-template-rows:28px 34px 1.5fr 1.5fr 3fr;
     gap:4px;
     padding:5px 8px 16px;
   }
