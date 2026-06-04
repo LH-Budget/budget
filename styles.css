@@ -484,3 +484,251 @@ button,input,select{font:inherit}
   .line,.item-row{height:22px!important;min-height:22px!important;font-size:13px!important;}
   .line input,.item-row input{height:20px!important;font-size:13px!important;}
 }
+
+
+/* v2.7 FINAL iPhone height fix */
+@media (max-width:759px){
+  html, body, #app{
+    height:100%!important;
+    min-height:100%!important;
+    overflow:hidden!important;
+    background:#060707!important;
+  }
+
+  .app-shell{
+    height:100dvh!important;
+    min-height:100dvh!important;
+    overflow:hidden!important;
+    position:relative!important;
+    background:radial-gradient(circle at top,#171817,#050505 58%)!important;
+  }
+
+  .budget-view{
+    height:100dvh!important;
+    min-height:100dvh!important;
+    display:grid!important;
+    grid-template-rows:calc(var(--safe-top) + 62px) minmax(0,1fr)!important;
+    padding-top:0!important;
+    overflow:hidden!important;
+  }
+
+  .topbar{
+    height:calc(var(--safe-top) + 62px)!important;
+    padding:calc(var(--safe-top) + 3px) 12px 5px!important;
+    display:grid!important;
+    grid-template-columns:42px 1fr 42px!important;
+    align-items:center!important;
+    position:static!important;
+    background:linear-gradient(180deg,#111212,#0b0c0c)!important;
+    border-bottom:1px solid #202020!important;
+  }
+
+  .logo-mark.small{
+    font-size:40px!important;
+    letter-spacing:-5px!important;
+    line-height:.68!important;
+  }
+
+  .top-logo{
+    font-size:14px!important;
+    letter-spacing:3px!important;
+  }
+
+  .icon-btn{
+    font-size:24px!important;
+    padding:4px!important;
+  }
+
+  .screen{
+    position:static!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    padding:6px 9px 0!important;
+    display:grid!important;
+    grid-template-rows:30px 36px minmax(0,1.7fr) minmax(0,1.7fr) minmax(0,3.05fr)!important;
+    gap:5px!important;
+    top:auto!important;
+    bottom:auto!important;
+  }
+
+  .year-row{
+    grid-template-columns:36px 1fr!important;
+    font-size:13px!important;
+    min-height:0!important;
+  }
+
+  .year-row select{
+    height:30px!important;
+  }
+
+  .months-row{
+    grid-template-columns:32px 1fr 32px!important;
+    gap:5px!important;
+    min-height:0!important;
+  }
+
+  .month-tab,.month-arrow{
+    height:36px!important;
+    border-radius:8px!important;
+  }
+
+  .panel{
+    min-height:0!important;
+    height:100%!important;
+    overflow:hidden!important;
+    border-radius:11px!important;
+    padding:7px 9px 4px!important;
+    display:grid!important;
+    grid-template-rows:22px auto minmax(0,1fr) 24px!important;
+    gap:2px!important;
+  }
+
+  .panel-title{
+    font-size:15px!important;
+    line-height:20px!important;
+    padding-right:112px!important;
+  }
+
+  .add-btn{
+    position:absolute!important;
+    top:7px!important;
+    right:9px!important;
+    height:22px!important;
+    min-height:22px!important;
+    padding:0 8px!important;
+    font-size:12px!important;
+    border-radius:7px!important;
+  }
+
+  .fixed-lines{
+    min-height:0!important;
+  }
+
+  .line,.item-row{
+    min-height:24px!important;
+    height:24px!important;
+    font-size:14px!important;
+    grid-template-columns:minmax(0,1fr) 118px!important;
+    gap:6px!important;
+  }
+
+  .line input,.item-row input{
+    height:22px!important;
+    font-size:14px!important;
+  }
+
+  .item-row>div{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 22px!important;
+    gap:2px!important;
+    align-items:center!important;
+  }
+
+  .del{
+    width:22px!important;
+    height:22px!important;
+    font-size:17px!important;
+    padding:0!important;
+  }
+
+  .scroll-list{
+    min-height:0!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding-right:1px!important;
+  }
+
+  .total{
+    height:24px!important;
+    min-height:24px!important;
+    grid-template-columns:1fr 118px!important;
+    padding-top:2px!important;
+    font-size:14px!important;
+  }
+
+  .total strong{
+    font-size:19px!important;
+    line-height:20px!important;
+    color:var(--text)!important;
+  }
+
+  .positive,.positive strong,strong.positive{color:var(--green)!important;}
+  .negative,.negative strong,strong.negative{color:var(--red)!important;}
+  .expense-panel .total strong{color:var(--red)!important;}
+  .balance-panel .total strong.positive{color:var(--text)!important;}
+
+  .bottom{
+    display:none!important;
+    height:0!important;
+    padding:0!important;
+  }
+
+  .version,.app-version{
+    position:absolute!important;
+    right:6px!important;
+    bottom:1px!important;
+    font-size:10px!important;
+    line-height:10px!important;
+    color:#746b50!important;
+    z-index:10!important;
+  }
+}
+
+/* smaller iPhone */
+@media (max-width:759px) and (max-height:740px){
+  .budget-view{
+    grid-template-rows:calc(var(--safe-top) + 56px) minmax(0,1fr)!important;
+  }
+
+  .topbar{
+    height:calc(var(--safe-top) + 56px)!important;
+    padding:calc(var(--safe-top) + 2px) 12px 4px!important;
+  }
+
+  .logo-mark.small{font-size:35px!important;}
+  .top-logo{font-size:12px!important;}
+
+  .screen{
+    padding:5px 8px 0!important;
+    gap:4px!important;
+    grid-template-rows:28px 34px minmax(0,1.55fr) minmax(0,1.55fr) minmax(0,2.85fr)!important;
+  }
+
+  .panel{
+    padding:6px 8px 3px!important;
+  }
+
+  .panel-title{
+    font-size:14px!important;
+    line-height:18px!important;
+  }
+
+  .add-btn{
+    top:6px!important;
+    right:8px!important;
+    height:20px!important;
+    min-height:20px!important;
+    font-size:11px!important;
+  }
+
+  .line,.item-row{
+    height:22px!important;
+    min-height:22px!important;
+    font-size:13px!important;
+  }
+
+  .line input,.item-row input{
+    height:20px!important;
+    font-size:13px!important;
+  }
+
+  .total{
+    height:22px!important;
+    min-height:22px!important;
+  }
+
+  .total strong{
+    font-size:18px!important;
+  }
+}
