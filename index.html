@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#090909" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LH Budget" />
+  <title>LH Budget</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <main id="loginView" class="login-view">
+    <section class="login-card">
+      <div class="logo-mark" aria-label="LH Budget logo"><span>L</span><span>H</span></div>
+      <h1>LH Budget</h1>
+      <p class="muted">Log ind for at åbne budgettet</p>
+      <form id="loginForm" class="login-form">
+        <label>Email / brugernavn
+          <input id="email" type="email" autocomplete="username" required />
+        </label>
+        <label>Kode
+          <input id="password" type="password" autocomplete="current-password" required />
+        </label>
+        <button type="submit" class="primary-btn">Log ind</button>
+        <p id="loginError" class="error-text"></p>
+      </form>
+    </section>
+    <div class="version">v1.1</div>
+  </main>
+
+  <main id="appView" class="app-view hidden">
+    <header class="app-header">
+      <div class="brand-row">
+        <div class="logo-mini"><span>L</span><span>H</span></div>
+        <div>
+          <h1>LH Budget</h1>
+          <small id="saveStatus">Klar</small>
+        </div>
+        <button id="logoutBtn" class="ghost-btn">Log ud</button>
+      </div>
+      <div class="controls-row">
+        <button id="prevYear" class="nav-btn">‹</button>
+        <input id="yearInput" class="year-input" type="number" min="2020" max="2100" />
+        <button id="nextYear" class="nav-btn">›</button>
+      </div>
+      <div class="month-row">
+        <button id="prevMonths" class="nav-btn">‹</button>
+        <div id="monthStrip" class="month-strip"></div>
+        <button id="nextMonths" class="nav-btn">›</button>
+      </div>
+    </header>
+
+    <section class="budget-grid">
+      <article class="card income-card">
+        <div class="card-title">Indtægter</div>
+        <div class="fixed-lines">
+          <div class="line editable-line"><span>Løn</span><input id="salaryInput" inputmode="decimal" /></div>
+          <div class="line editable-line"><span id="prevBalanceLabel">Lønkonto forrige</span><input id="openingInput" inputmode="decimal" /></div>
+        </div>
+        <div id="incomeList" class="scroll-list"></div>
+        <button id="addIncome" class="add-btn">+ Tilføj indtægt</button>
+        <div class="total-line"><span>I alt</span><strong id="incomeTotal">0</strong></div>
+      </article>
+
+      <article class="card balance-card">
+        <div class="card-title">Lønkonto minus udgifter</div>
+        <div class="fixed-lines">
+          <div class="line"><span>Indtægter</span><strong id="balanceIncome">0</strong></div>
+          <div class="line"><span>Udgifter</span><strong id="balanceExpenses">0</strong></div>
+        </div>
+        <div id="adjustmentList" class="scroll-list"></div>
+        <button id="addAdjustment" class="add-btn">+ Tilføj post</button>
+        <div class="total-line"><span>I alt</span><strong id="finalBalance">0</strong></div>
+      </article>
+
+      <article class="card expense-card">
+        <div class="card-title">Udgifter</div>
+        <div id="expenseList" class="scroll-list expenses"></div>
+        <button id="addExpense" class="add-btn">+ Tilføj udgift</button>
+        <div class="total-line"><span>I alt</span><strong id="expenseTotal">0</strong></div>
+      </article>
+    </section>
+
+    <footer class="bottom-bar">
+      <div>
+        <span id="saldoLabel">Saldo</span>
+        <strong id="bottomSaldo">0</strong>
+      </div>
+      <button id="syncBtn" class="primary-small">Gem</button>
+    </footer>
+    <div class="version">v1.1</div>
+  </main>
+
+  <template id="itemTemplate">
+    <div class="item-row">
+      <input class="label-input" placeholder="Tekst" />
+      <input class="amount-input" inputmode="decimal" placeholder="0" />
+      <button class="delete-btn" title="Slet">×</button>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
