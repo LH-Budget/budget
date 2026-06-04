@@ -104,7 +104,7 @@ button,input,select{font:inherit}
   border-bottom:1px solid #202020;
 }
 .logo-mark.small{
-  font-size:36px;
+  font-size:40px;
   letter-spacing:-5px;
   line-height:.68;
 }
@@ -112,7 +112,7 @@ button,input,select{font:inherit}
   text-align:center;
   color:var(--gold);
   text-transform:uppercase;
-  font-size:13px;
+  font-size:14px;
   letter-spacing:3px;
   font-weight:700;
 }
@@ -128,9 +128,9 @@ button,input,select{font:inherit}
   height:calc(100dvh - var(--safe-top) - 62px);
   min-height:0;
   overflow:hidden;
-  padding:6px 9px 18px;
+  padding:6px 9px 4px;
   display:grid;
-  grid-template-rows:30px 36px 1.6fr 1.6fr 3fr;
+  grid-template-rows:30px 36px 1.45fr 1.45fr 2.55fr;
   gap:5px;
 }
 
@@ -183,7 +183,7 @@ button,input,select{font:inherit}
   border:1px solid #303030;
   border-radius:11px;
   background:linear-gradient(180deg,rgba(18,19,19,.96),rgba(8,9,9,.96));
-  padding:7px 9px;
+  padding:7px 9px 6px;
   display:grid;
   grid-template-rows:22px auto minmax(0,1fr) 24px;
   gap:2px;
@@ -278,32 +278,44 @@ button,input,select{font:inherit}
   line-height:20px;
   color:var(--text);
 }
-.positive{color:var(--green)!important}
-.negative{color:var(--red)!important}
-.positive strong,strong.positive{color:var(--green)!important}
-.negative strong,strong.negative{color:var(--red)!important}
+
+/* Farver: kun negative røde. Udgifter-total rød. Positive indtægter grønne. */
+.positive, .positive strong, strong.positive{color:var(--green)!important}
+.negative, .negative strong, strong.negative{color:var(--red)!important}
+.expense-panel .total strong{color:var(--red)!important}
+.balance-panel .total strong.positive{color:var(--text)!important}
 
 .bottom{display:none!important}
-.app-version{
+.app-version,.version{
   position:absolute;
-  right:8px;
-  bottom:calc(1px + var(--safe-bottom));
+  right:6px;
+  bottom:1px;
   font-size:10px;
   color:#746b50;
+}
+
+/* Specific iPhone tightening: use the bottom 10mm too */
+@media (max-width:759px){
+  .screen{
+    height:calc(100dvh - var(--safe-top) - 62px);
+    padding-bottom:1px;
+    grid-template-rows:30px 36px 1.55fr 1.55fr 2.8fr;
+  }
+  .income-panel,.balance-panel,.expense-panel{min-height:0}
 }
 
 /* small iPhones */
 @media (max-width:759px) and (max-height:740px){
   .topbar{height:54px}
-  .logo-mark.small{font-size:32px}
+  .logo-mark.small{font-size:34px}
   .top-logo{font-size:12px}
   .screen{
     height:calc(100dvh - var(--safe-top) - 54px);
-    grid-template-rows:28px 34px 1.5fr 1.5fr 3fr;
+    grid-template-rows:28px 34px 1.35fr 1.35fr 2.45fr;
     gap:4px;
-    padding:5px 8px 16px;
+    padding:5px 8px 1px;
   }
-  .panel{padding:6px 8px}
+  .panel{padding:6px 8px 5px}
   .panel-title{font-size:14px;line-height:18px}
   .add-btn{top:6px;right:8px;height:20px;min-height:20px;font-size:11px}
   .line,.item-row{height:22px;min-height:22px;font-size:13px}
@@ -317,7 +329,7 @@ button,input,select{font:inherit}
   .topbar{height:72px}
   .screen{
     height:calc(100dvh - var(--safe-top) - 72px);
-    padding:14px 14px 22px;
+    padding:14px 14px 10px;
     grid-template-columns:1fr 1fr 1.2fr;
     grid-template-rows:42px 42px 1fr;
     grid-template-areas:
