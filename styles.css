@@ -119,3 +119,17 @@
   .bottom{height:64px!important;padding-bottom:4px!important;}
   .saldo strong{font-size:25px!important;line-height:26px!important;}
 }
+
+/* v2.2 */
+.bottom{display:none!important;}
+.budget-view{grid-template-rows:auto 1fr!important;}
+.topbar{height:72px!important;}
+.logo-mark.small{font-size:40px!important;}
+.top-logo{font-size:16px!important;letter-spacing:4px!important;}
+.screen{
+grid-template-rows:42px 46px 1.25fr 1.25fr 2.2fr!important;
+}
+.panel{padding:10px 12px!important;}
+.total strong{color:#f3f1ea!important;}
+.positive,.positive strong{color:var(--green)!important;}
+.negative,.negative strong{color:var(--red)!important;}
