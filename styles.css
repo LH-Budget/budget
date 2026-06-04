@@ -1,135 +1,338 @@
-:root{--bg:#060707;--panel:#0d0e0f;--line:#2a2a2a;--text:#f3f1ea;--muted:#9c988a;--gold:#d9b765;--green:#5ee15a;--red:#ff5555;--safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom)}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}button,input,select{font:inherit}.hidden{display:none!important}.app-shell{height:100dvh;width:100vw;overflow:hidden;background:radial-gradient(circle at top,#171817,#050505 55%)}
-.login-view{height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}.login-card{width:min(380px,100%);padding:30px 22px;border:1px solid #2f2f2f;border-radius:22px;background:linear-gradient(180deg,#111312,#080808);box-shadow:0 24px 80px #000}.logo-mark{font-family:Georgia,serif;font-size:74px;line-height:.8;text-align:center;color:var(--gold);letter-spacing:-9px;text-shadow:0 0 18px rgba(217,183,101,.25)}.logo-mark span{margin-left:-6px}.logo-mark.small{font-size:34px;letter-spacing:-5px}.brand{text-transform:uppercase;text-align:center;color:var(--gold);font-weight:700;letter-spacing:5px;margin:10px 0 30px}.login-form{display:grid;gap:12px}.login-form input{width:100%;height:48px;border-radius:14px;border:1px solid #353535;background:#050505;color:var(--text);padding:0 14px}.login-form button{height:50px;border:0;border-radius:16px;background:linear-gradient(135deg,#f5d98a,#b48d3c);font-weight:800;color:#14100a}.error{min-height:20px;color:var(--red);font-size:14px;text-align:center}.version{position:absolute;right:10px;bottom:calc(7px + var(--safe-bottom));font-size:11px;color:#746b50}
-.budget-view{height:100dvh;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;padding-top:var(--safe-top)}.topbar{height:82px;display:grid;grid-template-columns:46px 1fr 46px;align-items:center;padding:6px 14px 8px;border-bottom:1px solid #202020}.top-logo{text-align:center;color:var(--gold);text-transform:uppercase;font-size:14px;letter-spacing:3px;font-weight:700}.icon-btn{background:none;border:0;color:var(--gold);font-size:26px;padding:8px}.screen{min-height:0;overflow:hidden;padding:8px 10px;display:grid;grid-template-rows:38px 42px 1.05fr 1.08fr 1.7fr;gap:7px}.year-row{display:grid;grid-template-columns:42px 1fr;gap:8px;align-items:center;color:var(--text);font-size:14px}.year-row select{height:34px;background:#090909;color:var(--text);border:1px solid #343434;border-radius:10px;text-align:center;padding:0 10px}.months-row{display:grid;grid-template-columns:34px 1fr 34px;gap:6px}.month-arrow,.month-tab{border:1px solid #343434;background:#0a0a0a;color:var(--text);border-radius:9px}.month-arrow{font-size:24px;color:var(--gold)}.month-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.month-tab.active{background:linear-gradient(135deg,#f5d98a,#b48d3c);color:#12100a;font-weight:800}.panel{min-height:0;border:1px solid #303030;border-radius:12px;background:linear-gradient(180deg,rgba(18,19,19,.96),rgba(8,9,9,.96));padding:9px 10px;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto auto;gap:3px}.panel-title{color:var(--gold);font-weight:800;font-size:16px;letter-spacing:.7px}.line,.item-row{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:8px;align-items:center;min-height:28px;border-bottom:1px solid rgba(255,255,255,.07);font-size:15px}.line input,.item-row input{width:100%;height:28px;border:0;border-radius:8px;background:#020202;color:var(--text);text-align:right;padding:0 8px}.line span,.item-row input:first-child{text-align:left}.item-row input:first-child{text-align:left}.fixed-lines{min-height:0}.scroll-list{min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:4px}.scroll-list.compact{max-height:58px}.expenses{max-height:none}.add-btn{height:28px;background:none;border:0;border-top:1px solid rgba(217,183,101,.25);color:#a99a68}.total{display:grid;grid-template-columns:1fr 122px;align-items:center;border-top:1px solid rgba(255,255,255,.11);padding-top:5px;font-size:16px;font-weight:800}.total strong{text-align:right;font-size:20px}.positive{color:var(--green)}.negative strong,.final strong{color:var(--red)}.final{color:var(--red)}.item-actions{display:flex;gap:4px}.del{width:24px;height:26px;border:0;background:transparent;color:#8d7462;font-size:17px}.bottom{height:82px;padding:7px 14px calc(8px + var(--safe-bottom));border-top:1px solid #202020;position:relative}.saldo{text-align:center;border:1px solid #303030;border-radius:12px;padding:8px;background:rgba(12,13,13,.95)}.saldo span{display:block;color:var(--gold);font-weight:800;font-size:13px;letter-spacing:.6px}.saldo strong{font-size:30px;color:var(--red);line-height:1.05}
-@media (min-width: 760px){.budget-view{max-width:1200px;margin:auto}.screen{grid-template-columns:1fr 1fr 1.2fr;grid-template-rows:42px 42px 1fr;grid-template-areas:"year year year" "months months months" "income bal exp"}.year-row{grid-area:year;max-width:360px}.months-row{grid-area:months}.income-panel{grid-area:income}.balance-panel{grid-area:bal}.expense-panel{grid-area:exp}.topbar{height:72px}.screen{padding:14px}.bottom{height:88px}}
-@media (max-height: 740px){.topbar{height:66px}.logo-mark.small{font-size:26px}.screen{grid-template-rows:34px 38px .95fr 1fr 1.55fr;gap:5px}.panel{padding:7px 9px}.line,.item-row{min-height:25px;font-size:14px}.panel-title{font-size:15px}.bottom{height:72px}.saldo strong{font-size:26px}}
-/* v1.5: gør tilføj-knapper og scrollfelter ensartede */
-.income-panel,.balance-panel,.expense-panel{position:relative;}
-.scroll-list.compact{max-height:none;min-height:30px;}
-.add-btn{display:block;width:100%;min-height:30px;}
-
-
-/* v1.6: mere kompakt iPhone-layout og flere synlige linjer */
-.topbar{height:58px;padding:2px 14px 4px;}
-.logo-mark.small{font-size:28px;letter-spacing:-4px;line-height:.75;}
-.top-logo{font-size:12px;letter-spacing:2.5px;}
-.icon-btn{font-size:24px;padding:4px;}
-.screen{padding:6px 9px;gap:5px;grid-template-rows:32px 38px 1.18fr 1.18fr 1.85fr;}
-.year-row{grid-template-columns:36px 1fr;font-size:13px;}
-.year-row select{height:30px;border-radius:9px;}
-.months-row{grid-template-columns:32px 1fr 32px;gap:5px;}
-.month-tabs{gap:5px;}
-.month-arrow,.month-tab{border-radius:8px;font-size:14px;}
-.month-arrow{font-size:23px;}
-.panel{border-radius:11px;padding:7px 9px;gap:2px;grid-template-rows:auto auto minmax(0,1fr) auto;position:relative;}
-.panel-title{font-size:15px;line-height:20px;padding-right:116px;}
-.add-btn{position:absolute;top:7px;right:9px;width:auto;min-height:24px;height:24px;padding:0 9px;border:1px solid rgba(217,183,101,.32);border-radius:8px;background:#080808;color:#c8b372;font-size:13px;z-index:2;}
-.line,.item-row{min-height:26px;font-size:14px;grid-template-columns:minmax(0,1fr) 142px;gap:6px;}
-.line input,.item-row input{height:24px;border-radius:7px;padding:0 7px;}
-.item-row>div{display:grid!important;grid-template-columns:minmax(0,1fr) 26px!important;gap:3px;align-items:center;}
-.del{width:26px;height:24px;font-size:18px;line-height:20px;}
-.fixed-lines{margin-top:2px;}
-.scroll-list{padding-right:2px;}
-.total{padding-top:3px;font-size:15px;grid-template-columns:1fr 130px;}
-.total strong{font-size:20px;}
-.bottom{height:70px;padding:4px 14px calc(4px + var(--safe-bottom));display:flex;align-items:flex-end;}
-.saldo{width:100%;padding:6px 8px;border-radius:11px;}
-.saldo span{font-size:12px;}
-.saldo strong{font-size:29px;}
-.version{right:8px;bottom:calc(5px + var(--safe-bottom));}
-@media (max-height: 740px){
-  .topbar{height:50px}.screen{grid-template-rows:28px 34px 1.08fr 1.08fr 1.75fr;gap:4px;padding:5px 8px}.panel{padding:6px 8px}.panel-title{font-size:14px;line-height:18px}.add-btn{top:6px;right:8px;height:22px;min-height:22px;font-size:12px}.line,.item-row{min-height:23px;font-size:13px}.line input,.item-row input{height:22px}.total strong{font-size:18px}.bottom{height:60px}.saldo strong{font-size:25px}
+:root{
+  --bg:#060707;
+  --panel:#0d0e0f;
+  --line:#292929;
+  --text:#f3f1ea;
+  --muted:#9c988a;
+  --gold:#d9b765;
+  --green:#5ee15a;
+  --red:#ff5555;
+  --safe-top:env(safe-area-inset-top);
+  --safe-bottom:env(safe-area-inset-bottom);
 }
 
-
-/* v2.1: faktisk iPhone-kompakt layout - upload styles.css sammen med app.js */
-@media (max-width: 759px){
-  .budget-view{grid-template-rows:auto 1fr auto;height:100dvh;}
-  .topbar{height:44px!important;padding:1px 12px 2px!important;grid-template-columns:38px 1fr 38px!important;}
-  .logo-mark.small{font-size:20px!important;letter-spacing:-3px!important;line-height:.65!important;}
-  .top-logo{font-size:10px!important;letter-spacing:2px!important;}
-  .icon-btn{font-size:22px!important;padding:2px!important;}
-  .screen{padding:4px 8px!important;gap:4px!important;grid-template-rows:28px 34px 1.15fr 1.15fr 1.95fr!important;min-height:0!important;}
-  .year-row{grid-template-columns:34px 1fr!important;font-size:12px!important;}
-  .year-row select{height:28px!important;border-radius:8px!important;padding:0 8px!important;}
-  .months-row{grid-template-columns:30px 1fr 30px!important;gap:4px!important;}
-  .month-tabs{gap:4px!important;}
-  .month-tab,.month-arrow{height:34px!important;border-radius:8px!important;font-size:15px!important;padding:0!important;}
-  .month-arrow{font-size:23px!important;}
-  .panel{min-height:0!important;border-radius:10px!important;padding:5px 8px!important;gap:1px!important;grid-template-rows:20px auto minmax(0,1fr) 20px!important;}
-  .panel-title{font-size:15px!important;line-height:18px!important;letter-spacing:.6px!important;padding-right:98px!important;}
-  .add-btn{top:5px!important;right:8px!important;height:20px!important;min-height:20px!important;line-height:18px!important;padding:0 7px!important;font-size:12px!important;border-radius:7px!important;}
-  .line,.item-row{min-height:22px!important;height:22px!important;font-size:14px!important;grid-template-columns:minmax(0,1fr) 116px!important;gap:5px!important;border-bottom:1px solid rgba(255,255,255,.06)!important;}
-  .line input,.item-row input{height:21px!important;border-radius:7px!important;padding:0 7px!important;font-size:14px!important;}
-  .item-row>div{display:grid!important;grid-template-columns:minmax(0,1fr) 22px!important;gap:2px!important;align-items:center!important;}
-  .del{width:22px!important;height:21px!important;font-size:17px!important;line-height:18px!important;padding:0!important;}
-  .fixed-lines{min-height:auto!important;margin-top:0!important;}
-  .scroll-list{min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;padding-right:1px!important;}
-  .scroll-list.compact{max-height:none!important;}
-  .total{height:20px!important;min-height:20px!important;padding-top:1px!important;font-size:14px!important;grid-template-columns:1fr 116px!important;}
-  .total strong{font-size:20px!important;line-height:20px!important;}
-  .bottom{height:58px!important;padding:3px 12px calc(3px + var(--safe-bottom))!important;display:flex!important;align-items:flex-end!important;}
-  .saldo{width:100%!important;padding:4px 8px!important;border-radius:10px!important;}
-  .saldo span{font-size:11px!important;line-height:13px!important;}
-  .saldo strong{font-size:28px!important;line-height:30px!important;}
-  .version{font-size:10px!important;right:7px!important;bottom:calc(4px + var(--safe-bottom))!important;}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
-@media (max-width: 759px) and (max-height: 720px){
-  .topbar{height:38px!important;}
-  .logo-mark.small{font-size:18px!important;}
-  .top-logo{font-size:9px!important;}
-  .screen{grid-template-rows:26px 32px 1fr 1fr 1.8fr!important;gap:3px!important;padding:3px 7px!important;}
-  .panel{padding:4px 7px!important;}
-  .panel-title{font-size:14px!important;line-height:17px!important;}
-  .line,.item-row{min-height:20px!important;height:20px!important;font-size:13px!important;}
-  .line input,.item-row input{height:19px!important;font-size:13px!important;}
-  .add-btn{height:18px!important;min-height:18px!important;font-size:11px!important;}
-  .total strong{font-size:18px!important;}
-  .bottom{height:50px!important;}
-  .saldo strong{font-size:24px!important;line-height:25px!important;}
+button,input,select{font:inherit}
+.hidden{display:none!important}
+
+.app-shell{
+  width:100vw;
+  height:100dvh;
+  overflow:hidden;
+  position:relative;
+  background:radial-gradient(circle at top,#171817,#050505 58%);
 }
 
-/* v2.1: fix iPhone home-screen black bottom by pinning footer and sizing content between header/footer */
-@media (max-width: 759px){
-  html,body,#app{height:100%;min-height:100%;overflow:hidden!important;background:#060707!important;}
-  .app-shell{height:100svh!important;min-height:100svh!important;overflow:hidden!important;position:relative!important;}
-  @supports (height: 100dvh){.app-shell{height:100dvh!important;min-height:100dvh!important;}}
-  .budget-view{height:100%!important;display:block!important;position:relative!important;overflow:hidden!important;padding-top:0!important;}
-  .topbar{position:absolute!important;left:0!important;right:0!important;top:var(--safe-top)!important;height:44px!important;z-index:5!important;background:linear-gradient(180deg,#111212,#0b0c0c)!important;}
-  .screen{position:absolute!important;left:0!important;right:0!important;top:calc(var(--safe-top) + 44px)!important;bottom:calc(64px + var(--safe-bottom))!important;height:auto!important;overflow:hidden!important;}
-  .bottom{position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:calc(64px + var(--safe-bottom))!important;padding:4px 12px calc(4px + var(--safe-bottom))!important;z-index:6!important;background:linear-gradient(180deg,rgba(6,7,7,.25),#060707 20%)!important;border-top:1px solid #202020!important;}
-  .saldo{margin:0!important;}
+/* LOGIN */
+.login-view{
+  height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  position:relative;
+}
+.login-card{
+  width:min(380px,100%);
+  padding:30px 22px;
+  border:1px solid #2f2f2f;
+  border-radius:22px;
+  background:linear-gradient(180deg,#111312,#080808);
+  box-shadow:0 24px 80px #000;
+}
+.logo-mark{
+  font-family:Georgia,serif;
+  font-size:74px;
+  line-height:.8;
+  text-align:center;
+  color:var(--gold);
+  letter-spacing:-9px;
+  text-shadow:0 0 18px rgba(217,183,101,.25);
+}
+.logo-mark span{margin-left:-6px}
+.brand{
+  text-transform:uppercase;
+  text-align:center;
+  color:var(--gold);
+  font-weight:700;
+  letter-spacing:5px;
+  margin:10px 0 30px;
+}
+.login-form{display:grid;gap:12px}
+.login-form input{
+  width:100%;
+  height:48px;
+  border-radius:14px;
+  border:1px solid #353535;
+  background:#050505;
+  color:var(--text);
+  padding:0 14px;
+}
+.login-form button{
+  height:50px;
+  border:0;
+  border-radius:16px;
+  background:linear-gradient(135deg,#f5d98a,#b48d3c);
+  font-weight:800;
+  color:#14100a;
+}
+.error{min-height:20px;color:var(--red);font-size:14px;text-align:center}
+
+/* APP */
+.budget-view{
+  height:100dvh;
+  overflow:hidden;
+  position:relative;
+  padding-top:var(--safe-top);
 }
 
-
-/* v2.1: udnyt iPhone-højden bedre - fjern for stor safe-area afstand i bunden */
-@media (max-width: 759px){
-  .app-shell{height:100dvh!important;min-height:100dvh!important;}
-  .budget-view{height:100dvh!important;min-height:100dvh!important;}
-  .screen{bottom:70px!important;grid-template-rows:28px 34px 1.12fr 1.12fr 2.35fr!important;}
-  .bottom{height:70px!important;bottom:0!important;padding:4px 12px 5px!important;align-items:flex-end!important;background:linear-gradient(180deg,rgba(6,7,7,.05),#060707 30%)!important;}
-  .saldo{padding:5px 8px!important;}
-  .saldo span{font-size:11px!important;line-height:13px!important;}
-  .saldo strong{font-size:28px!important;line-height:29px!important;}
-  .version{bottom:7px!important;right:8px!important;}
+.topbar{
+  height:62px;
+  display:grid;
+  grid-template-columns:42px 1fr 42px;
+  align-items:center;
+  padding:3px 12px 5px;
+  border-bottom:1px solid #202020;
 }
-@media (max-width: 759px) and (max-height: 760px){
-  .screen{bottom:64px!important;grid-template-rows:26px 32px 1.05fr 1.05fr 2.25fr!important;}
-  .bottom{height:64px!important;padding-bottom:4px!important;}
-  .saldo strong{font-size:25px!important;line-height:26px!important;}
+.logo-mark.small{
+  font-size:36px;
+  letter-spacing:-5px;
+  line-height:.68;
+}
+.top-logo{
+  text-align:center;
+  color:var(--gold);
+  text-transform:uppercase;
+  font-size:13px;
+  letter-spacing:3px;
+  font-weight:700;
+}
+.icon-btn{
+  background:none;
+  border:0;
+  color:var(--gold);
+  font-size:24px;
+  padding:4px;
 }
 
-/* v2.2 */
-.bottom{display:none!important;}
-.budget-view{grid-template-rows:auto 1fr!important;}
-.topbar{height:72px!important;}
-.logo-mark.small{font-size:40px!important;}
-.top-logo{font-size:16px!important;letter-spacing:4px!important;}
 .screen{
-grid-template-rows:42px 46px 1.25fr 1.25fr 2.2fr!important;
+  height:calc(100dvh - var(--safe-top) - 62px);
+  min-height:0;
+  overflow:hidden;
+  padding:6px 9px 18px;
+  display:grid;
+  grid-template-rows:30px 36px 1.25fr 1.25fr 2.25fr;
+  gap:5px;
 }
-.panel{padding:10px 12px!important;}
-.total strong{color:#f3f1ea!important;}
-.positive,.positive strong{color:var(--green)!important;}
-.negative,.negative strong{color:var(--red)!important;}
+
+.year-row{
+  display:grid;
+  grid-template-columns:36px 1fr;
+  gap:8px;
+  align-items:center;
+  color:var(--text);
+  font-size:13px;
+}
+.year-row select{
+  height:30px;
+  background:#090909;
+  color:var(--text);
+  border:1px solid #343434;
+  border-radius:9px;
+  text-align:center;
+  padding:0 10px;
+}
+
+.months-row{
+  display:grid;
+  grid-template-columns:32px 1fr 32px;
+  gap:5px;
+}
+.month-tabs{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+}
+.month-arrow,.month-tab{
+  height:36px;
+  border:1px solid #343434;
+  background:#0a0a0a;
+  color:var(--text);
+  border-radius:8px;
+  padding:0;
+}
+.month-arrow{font-size:23px;color:var(--gold)}
+.month-tab.active{
+  background:linear-gradient(135deg,#f5d98a,#b48d3c);
+  color:#12100a;
+  font-weight:800;
+}
+
+.panel{
+  min-height:0;
+  position:relative;
+  border:1px solid #303030;
+  border-radius:11px;
+  background:linear-gradient(180deg,rgba(18,19,19,.96),rgba(8,9,9,.96));
+  padding:7px 9px;
+  display:grid;
+  grid-template-rows:22px auto minmax(0,1fr) 24px;
+  gap:2px;
+}
+.panel-title{
+  color:var(--gold);
+  font-weight:800;
+  font-size:15px;
+  line-height:20px;
+  letter-spacing:.55px;
+  padding-right:112px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.add-btn{
+  position:absolute;
+  top:7px;
+  right:9px;
+  width:auto;
+  height:22px;
+  min-height:22px;
+  padding:0 8px;
+  border:1px solid rgba(217,183,101,.32);
+  border-radius:7px;
+  background:#080808;
+  color:#c8b372;
+  font-size:12px;
+  z-index:2;
+}
+
+.fixed-lines{min-height:0}
+.line,.item-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 118px;
+  gap:6px;
+  align-items:center;
+  min-height:24px;
+  height:24px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:14px;
+}
+.line span,.item-row input:first-child{
+  text-align:left;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.line input,.item-row input{
+  width:100%;
+  height:22px;
+  border:0;
+  border-radius:7px;
+  background:#020202;
+  color:var(--text);
+  text-align:right;
+  padding:0 7px;
+}
+.item-row>div{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 22px!important;
+  gap:2px;
+  align-items:center;
+}
+.del{
+  width:22px;
+  height:22px;
+  border:0;
+  background:transparent;
+  color:#8d7462;
+  font-size:17px;
+  line-height:18px;
+  padding:0;
+}
+.scroll-list{
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-right:1px;
+}
+.total{
+  display:grid;
+  grid-template-columns:1fr 118px;
+  align-items:center;
+  border-top:1px solid rgba(255,255,255,.12);
+  padding-top:2px;
+  font-size:14px;
+  font-weight:800;
+}
+.total strong{
+  text-align:right;
+  font-size:19px;
+  line-height:20px;
+  color:var(--text);
+}
+.positive{color:var(--green)!important}
+.negative{color:var(--red)!important}
+.positive strong,strong.positive{color:var(--green)!important}
+.negative strong,strong.negative{color:var(--red)!important}
+
+.bottom{display:none!important}
+.app-version{
+  position:absolute;
+  right:8px;
+  bottom:calc(5px + var(--safe-bottom));
+  font-size:10px;
+  color:#746b50;
+}
+
+/* small iPhones */
+@media (max-width:759px) and (max-height:740px){
+  .topbar{height:54px}
+  .logo-mark.small{font-size:32px}
+  .top-logo{font-size:12px}
+  .screen{
+    height:calc(100dvh - var(--safe-top) - 54px);
+    grid-template-rows:28px 34px 1.15fr 1.15fr 2.1fr;
+    gap:4px;
+    padding:5px 8px 16px;
+  }
+  .panel{padding:6px 8px}
+  .panel-title{font-size:14px;line-height:18px}
+  .add-btn{top:6px;right:8px;height:20px;min-height:20px;font-size:11px}
+  .line,.item-row{height:22px;min-height:22px;font-size:13px}
+  .line input,.item-row input{height:20px;font-size:13px}
+  .total strong{font-size:18px}
+}
+
+/* tablet / desktop */
+@media (min-width:760px){
+  .budget-view{max-width:1200px;margin:auto}
+  .topbar{height:72px}
+  .screen{
+    height:calc(100dvh - var(--safe-top) - 72px);
+    padding:14px 14px 22px;
+    grid-template-columns:1fr 1fr 1.2fr;
+    grid-template-rows:42px 42px 1fr;
+    grid-template-areas:
+      "year year year"
+      "months months months"
+      "income bal exp";
+  }
+  .year-row{grid-area:year;max-width:360px}
+  .months-row{grid-area:months}
+  .income-panel{grid-area:income}
+  .balance-panel{grid-area:bal}
+  .expense-panel{grid-area:exp}
+  .panel{padding:10px 12px}
+  .panel-title{font-size:16px}
+  .line,.item-row{height:30px;min-height:30px;font-size:15px}
+  .line input,.item-row input{height:28px}
+  .total strong{font-size:22px}
+}
