@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v3.1: uploaded logo + iPhone corner adjustment */
+/* v3.2 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -494,23 +494,24 @@ button,input,select{font:inherit}
   object-fit:contain;
 }
 
-/* PWA home-screen: keep v3.0 fullscreen fix, but lift bottom content away from rounded corners */
-@media (max-width:759px){
-  .screen{
-    padding-bottom:12px!important;
-  }
-  .version,.app-version{
-    bottom:10px!important;
-  }
+/* Flyt version til midten i samme højde som I ALT under Udgifter */
+.version,.app-version{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  transform:translateX(-50%)!important;
+  bottom:7px!important;
+  font-size:11px!important;
+  line-height:11px!important;
+  color:#746b50!important;
+  z-index:20!important;
+  pointer-events:none!important;
 }
 
 @media (display-mode: standalone), (display-mode: fullscreen){
   @media (max-width:759px){
-    .screen{
-      padding-bottom:14px!important;
-    }
     .version,.app-version{
-      bottom:10px!important;
+      bottom:7px!important;
     }
   }
 }
@@ -519,8 +520,5 @@ button,input,select{font:inherit}
   .top-logo-img{
     width:108px;
     height:42px;
-  }
-  .screen{
-    padding-bottom:12px!important;
   }
 }
