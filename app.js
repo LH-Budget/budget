@@ -1,4 +1,4 @@
-const VERSION='v1.4';
+const VERSION='v1.5';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -25,7 +25,15 @@ function render(){ $('salaryInput').value=fmt(settings.salary_amount); $('openin
 function renderList(id,section){const el=$(id);el.innerHTML='';items.filter(x=>x.section===section).forEach(item=>{const row=document.createElement('div');row.className='item-row';const label=document.createElement('input');label.value=item.label;label.placeholder='Tekst';const amount=document.createElement('input');amount.value=fmt(item.amount);amount.inputMode='decimal';const del=document.createElement('button');del.className='del';del.textContent='×';del.onclick=()=>deleteItem(item.id);label.onchange=()=>updateItem(item.id,{label:label.value});amount.onchange=()=>updateItem(item.id,{amount:parseAmount(amount.value)});const right=document.createElement('div');right.style.display='grid';right.style.gridTemplateColumns='1fr 24px';right.style.alignItems='center';right.append(amount,del);row.append(label,right);el.appendChild(row)})}
 async function updateSettings(patch){const {data,error}=await sb.from('month_settings').update(patch).eq('id',settings.id).select('*').single(); if(error){alert('Databasefejl: '+error.message);return} settings=data; render()}
 $('salaryInput').onchange=()=>updateSettings({salary_amount:parseAmount($('salaryInput').value)});$('openingInput').onchange=()=>updateSettings({opening_balance:parseAmount($('openingInput').value)});
-async function addItem(section){const key=monthKey(year,month);const nextOrder=(items.filter(x=>x.section===section).reduce((m,x)=>Math.max(m,Number(x.sort_order)||0),0)+1);const {error}=await sb.from('budget_items').insert({user_id:user.id,month_key:key,year,month,section,label:section==='expense'?'Ny udgift':section==='income'?'Ny indtægt':'Ny post',amount:0,sort_order:nextOrder}); if(error){alert('Databasefejl: '+error.message);return} await loadMonth()}
+async function addItem(section){
+  const key=monthKey(year,month);
+  const nextOrder=(items.filter(x=>x.section===section).reduce((m,x)=>Math.max(m,Number(x.sort_order)||0),0)+1);
+  const txt=section==='expense'?'Ny udgift':section==='income'?'Ny indtægt':'Ny post';
+  const payload={user_id:user.id,month_key:key,year,month,section,label:txt,title:txt,amount:0,sort_order:nextOrder};
+  const {data,error}=await sb.from('budget_items').insert(payload).select('*').single();
+  if(error){alert('Databasefejl: '+error.message);return}
+  if(data){items.push(data);render()}else{await loadMonth()}
+}
 async function updateItem(id,patch){const {error}=await sb.from('budget_items').update(patch).eq('id',id); if(error){alert('Databasefejl: '+error.message);return} const it=items.find(x=>x.id===id); if(it)Object.assign(it,patch); render()}
 async function deleteItem(id){const {error}=await sb.from('budget_items').delete().eq('id',id); if(error){alert('Databasefejl: '+error.message);return} items=items.filter(x=>x.id!==id); render()}
 $('addIncome').onclick=()=>addItem('income');$('addExpense').onclick=()=>addItem('expense');$('addAdjustment').onclick=()=>addItem('adjustment');
