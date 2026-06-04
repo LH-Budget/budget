@@ -16,8 +16,7 @@
   <div id="app" class="app-shell">
     <section id="loginView" class="login-view">
       <div class="login-card">
-        <div class="logo-mark">L<span>H</span></div>
-        <div class="brand">LH Budget</div>
+        <img class="logo-img login-logo" src="logo.png" alt="LH Budget">
         <form id="loginForm" class="login-form">
           <input id="email" type="email" autocomplete="username" placeholder="Brugernavn / email" required />
           <input id="password" type="password" autocomplete="current-password" placeholder="Kode" required />
@@ -25,13 +24,13 @@
           <div id="loginError" class="error"></div>
         </form>
       </div>
-      <div class="version">v3.0</div>
+      <div class="version">v3.1</div>
     </section>
 
     <section id="budgetView" class="budget-view hidden">
       <header class="topbar">
         <button id="menuBtn" class="icon-btn">☰</button>
-        <div class="top-logo"><div class="logo-mark small">L<span>H</span></div><div>LH Budget</div></div>
+        <div class="top-logo"><img class="logo-img top-logo-img" src="logo.png" alt="LH Budget"></div>
         <button id="logoutBtn" class="icon-btn">⎋</button>
       </header>
 
@@ -82,7 +81,7 @@
           <strong id="saldoValue">0</strong>
         </div>
       </footer>
-      <div class="version app-version">v3.0</div>
+      <div class="version app-version">v3.1</div>
     </section>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

@@ -469,3 +469,58 @@ button,input,select{font:inherit}
   .balance-panel{flex:1.65 1 0!important;}
   .expense-panel{flex:3.05 1 0!important;}
 }
+
+
+/* v3.1: uploaded logo + iPhone corner adjustment */
+.logo-img{
+  display:block;
+  object-fit:contain;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.login-logo{
+  width:220px;
+  max-width:82%;
+  margin:0 auto 26px;
+}
+.top-logo{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+}
+.top-logo-img{
+  width:116px;
+  height:46px;
+  object-fit:contain;
+}
+
+/* PWA home-screen: keep v3.0 fullscreen fix, but lift bottom content away from rounded corners */
+@media (max-width:759px){
+  .screen{
+    padding-bottom:12px!important;
+  }
+  .version,.app-version{
+    bottom:10px!important;
+  }
+}
+
+@media (display-mode: standalone), (display-mode: fullscreen){
+  @media (max-width:759px){
+    .screen{
+      padding-bottom:14px!important;
+    }
+    .version,.app-version{
+      bottom:10px!important;
+    }
+  }
+}
+
+@media (max-width:759px) and (max-height:740px){
+  .top-logo-img{
+    width:108px;
+    height:42px;
+  }
+  .screen{
+    padding-bottom:12px!important;
+  }
+}
