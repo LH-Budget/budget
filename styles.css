@@ -615,3 +615,14 @@ button,input,select{font:inherit}
     padding-bottom:17px!important;
   }
 }
+
+
+/* v3.4 small logo/version fix */
+.top-lh-logo{
+  height:72px !important;
+  margin-top:-6px !important;
+}
+
+.version,.app-version{
+  bottom:6px !important;
+}
