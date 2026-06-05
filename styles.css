@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v3.4 small logo/version fix */
+/* v3.5 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -625,4 +625,12 @@ button,input,select{font:inherit}
 
 .version,.app-version{
   bottom:6px !important;
+}
+
+
+/* v3.5 smaller top logo only */
+.top-lh-logo{
+  width:78px !important;
+  height:40px !important;
+  margin-top:0 !important;
 }
