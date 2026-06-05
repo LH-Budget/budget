@@ -1,4 +1,4 @@
-const VERSION='v3.8';
+const VERSION='v3.9';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -41,15 +41,60 @@ $('addIncome').onclick=()=>addItem('income');$('addExpense').onclick=()=>addItem
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});boot();
 
 
-function transferNotImplemented(){
- alert('Overfør data kommer i næste version. Denne version viser kun knapperne.');
+
+async function transferSection(section){
+  if(!user){ showError('Du er ikke logget ind'); return; }
+  if(month >= 12){ alert('Der er ingen efterfølgende måneder i dette år.'); return; }
+
+  const source = items
+    .filter(x => x.section === section)
+    .map((x, idx) => ({
+      user_id: user.id,
+      year: year,
+      section: section,
+      label: x.label || '',
+      amount: Number(x.amount || 0),
+      sort_order: idx + 1
+    }));
+
+  if(!source.length){
+    alert('Der er ingen poster at overføre.');
+    return;
+  }
+
+  const sectionName = section === 'income' ? 'indtægter' : section === 'expense' ? 'udgifter' : 'poster';
+  if(!confirm(`Overfør ${sectionName} fra ${monthNames[month-1]} til resten af året?`)) return;
+
+  for(let m = month + 1; m <= 12; m++){
+    const key = monthKey(year, m);
+
+    const del = await sb.from('budget_items')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('month_key', key)
+      .eq('section', section);
+
+    if(del.error){ showError(del.error.message); return; }
+
+    const rows = source.map((x, idx) => ({
+      ...x,
+      month: m,
+      month_key: key,
+      sort_order: idx + 1
+    }));
+
+    const ins = await sb.from('budget_items').insert(rows);
+    if(ins.error){ showError(ins.error.message); return; }
+  }
+
+  alert('Data er overført.');
 }
 
 window.addEventListener('load',()=>{
  const a=document.getElementById('transferIncome');
  const b=document.getElementById('transferAdjustment');
  const c=document.getElementById('transferExpense');
- if(a) a.onclick=transferNotImplemented;
- if(b) b.onclick=transferNotImplemented;
- if(c) c.onclick=transferNotImplemented;
+ if(a) a.onclick=()=>transferSection('income');
+ if(b) b.onclick=()=>transferSection('adjustment');
+ if(c) c.onclick=()=>transferSection('expense');
 });

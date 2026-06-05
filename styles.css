@@ -634,3 +634,47 @@ button,input,select{font:inherit}
   height:40px !important;
   margin-top:0 !important;
 }
+
+
+/* v3.9: place Tilføj + Overfør side by side */
+.action-row{
+  position:absolute!important;
+  top:5px!important;
+  right:7px!important;
+  display:flex!important;
+  gap:4px!important;
+  z-index:5!important;
+}
+.action-row .add-btn,
+.action-row .transfer-btn{
+  position:static!important;
+  width:auto!important;
+  height:20px!important;
+  min-height:20px!important;
+  line-height:18px!important;
+  padding:0 7px!important;
+  border:1px solid rgba(217,183,101,.32)!important;
+  border-radius:7px!important;
+  background:#080808!important;
+  color:#c8b372!important;
+  font-size:10.5px!important;
+  white-space:nowrap!important;
+}
+.panel-title{
+  padding-right:145px!important;
+}
+@media (max-width:759px){
+  .action-row{
+    top:5px!important;
+    right:7px!important;
+    gap:3px!important;
+  }
+  .action-row .add-btn,
+  .action-row .transfer-btn{
+    height:19px!important;
+    min-height:19px!important;
+    line-height:17px!important;
+    padding:0 6px!important;
+    font-size:10px!important;
+  }
+}
