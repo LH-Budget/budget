@@ -23,7 +23,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v4.4';
+const VERSION='v4.5';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -114,6 +114,7 @@ async function transferSection(section){
     if(ins.error){ showError(ins.error.message); return; }
   }
 
+  await saveAndPropagateFromCurrentMonth();
   alert('Data er overført.');
 }
 
@@ -124,4 +125,86 @@ window.addEventListener('load',()=>{
  if(a) a.onclick=()=>transferSection('income');
  if(b) b.onclick=()=>transferSection('adjustment');
  if(c) c.onclick=()=>transferSection('expense');
+});
+
+
+async function getMonthDataForCascade(y, m){
+  const key = monthKey(y, m);
+  const ms = await sb.from('month_settings')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('month_key', key)
+    .maybeSingle();
+
+  const bi = await sb.from('budget_items')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('month_key', key);
+
+  return {
+    settings: ms.data || {salary_amount:0, opening_balance:0},
+    items: bi.data || []
+  };
+}
+
+function calcCascadeBalance(s, arr){
+  const incomeItems = arr.filter(x=>x.section==='income').reduce((sum,x)=>sum+Number(x.amount||0),0);
+  const expenseItems = arr.filter(x=>x.section==='expense').reduce((sum,x)=>sum+Number(x.amount||0),0);
+  const adjustmentItems = arr.filter(x=>x.section==='adjustment').reduce((sum,x)=>sum+Number(x.amount||0),0);
+
+  return Number(s.salary_amount||0) + Number(s.opening_balance||0) + incomeItems - expenseItems + adjustmentItems;
+}
+
+async function propagateOpeningBalancesFrom(startMonth){
+  if(!user) return;
+
+  let previousBalance = null;
+
+  for(let m=startMonth; m<=12; m++){
+    const data = await getMonthDataForCascade(year, m);
+    const s = data.settings;
+    const arr = data.items;
+
+    if(m === startMonth){
+      previousBalance = calcCascadeBalance(s, arr);
+      continue;
+    }
+
+    const key = monthKey(year, m);
+
+    await sb.from('month_settings').upsert({
+      user_id: user.id,
+      month_key: key,
+      year: year,
+      month: m,
+      salary_amount: Number(s.salary_amount || 0),
+      opening_balance: previousBalance
+    }, { onConflict: 'user_id,month_key' });
+
+    s.opening_balance = previousBalance;
+    previousBalance = calcCascadeBalance(s, arr);
+  }
+}
+
+async function saveAndPropagateFromCurrentMonth(){
+  await propagateOpeningBalancesFrom(month);
+}
+
+
+let propagateTimer = null;
+function schedulePropagate(){
+  clearTimeout(propagateTimer);
+  propagateTimer = setTimeout(async ()=>{
+    if(user) await saveAndPropagateFromCurrentMonth();
+  }, 350);
+}
+
+
+window.addEventListener('load',()=>{
+  document.addEventListener('change', (e)=>{
+    if(e.target && e.target.tagName === 'INPUT') schedulePropagate();
+  });
+  document.addEventListener('blur', (e)=>{
+    if(e.target && e.target.tagName === 'INPUT') schedulePropagate();
+  }, true);
 });
