@@ -1,4 +1,4 @@
-const VERSION='v3.5';
+const VERSION='v3.6';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -39,3 +39,64 @@ async function updateItem(id,patch){const {error}=await sb.from('budget_items').
 async function deleteItem(id){const {error}=await sb.from('budget_items').delete().eq('id',id); if(error){alert('Databasefejl: '+error.message);return} items=items.filter(x=>x.id!==id); render()}
 $('addIncome').onclick=()=>addItem('income');$('addExpense').onclick=()=>addItem('expense');$('addAdjustment').onclick=()=>addItem('adjustment');
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});boot();
+
+
+async function transferSection(section){
+  const sectionName = section === 'income' ? 'indtægter' : section === 'expense' ? 'udgifter' : 'poster';
+  if(!user){ showError('Du er ikke logget ind'); return; }
+  if(month >= 12){ alert('Der er ingen efterfølgende måneder i dette år.'); return; }
+
+  const sourceItems = items
+    .filter(x => x.section === section)
+    .map((x, i) => ({
+      user_id: user.id,
+      year: year,
+      section: section,
+      label: x.label || '',
+      amount: Number(x.amount || 0),
+      sort_order: i + 1
+    }));
+
+  if(!sourceItems.length){
+    alert('Der er ingen data at overføre.');
+    return;
+  }
+
+  const ok = confirm(`Overfør ${sectionName} fra ${monthNames[month-1]} til resten af året?`);
+  if(!ok) return;
+
+  for(let m = month + 1; m <= 12; m++){
+    const key = monthKey(year, m);
+
+    await sb.from('budget_items')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('month_key', key)
+      .eq('section', section);
+
+    const rows = sourceItems.map((x, idx) => ({
+      ...x,
+      month: m,
+      month_key: key,
+      sort_order: idx + 1
+    }));
+
+    if(rows.length){
+      const {error} = await sb.from('budget_items').insert(rows);
+      if(error){
+        showError(error.message);
+        return;
+      }
+    }
+  }
+
+  alert('Data er overført til resten af året.');
+}
+
+
+
+document.addEventListener('click', async (e)=>{
+  const btn = e.target.closest('.transfer-btn');
+  if(!btn) return;
+  await transferSection(btn.dataset.section);
+});

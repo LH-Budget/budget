@@ -634,3 +634,50 @@ button,input,select{font:inherit}
   height:40px !important;
   margin-top:0 !important;
 }
+
+
+/* v3.6 transfer data buttons */
+.panel-actions{
+  position:absolute!important;
+  top:6px!important;
+  right:8px!important;
+  display:flex!important;
+  gap:4px!important;
+  z-index:3!important;
+}
+.panel-actions .add-btn,
+.panel-actions .transfer-btn{
+  position:static!important;
+  height:20px!important;
+  min-height:20px!important;
+  line-height:18px!important;
+  padding:0 6px!important;
+  border:1px solid rgba(217,183,101,.32)!important;
+  border-radius:7px!important;
+  background:#080808!important;
+  color:#c8b372!important;
+  font-size:10.5px!important;
+  white-space:nowrap!important;
+}
+.panel-title{
+  padding-right:190px!important;
+}
+@media (max-width:759px){
+  .panel-actions{
+    top:5px!important;
+    right:7px!important;
+    gap:3px!important;
+  }
+  .panel-actions .add-btn,
+  .panel-actions .transfer-btn{
+    height:18px!important;
+    min-height:18px!important;
+    line-height:16px!important;
+    padding:0 5px!important;
+    font-size:9.7px!important;
+  }
+  .panel-title{
+    padding-right:176px!important;
+    font-size:13.5px!important;
+  }
+}
