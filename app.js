@@ -57,7 +57,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v4.1';
+const VERSION='v4.2';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -83,6 +83,8 @@ function calcTotals(s,it){const incomeExtra=it.filter(x=>x.section==='income').r
 function setAmountClass(el,n){ if(!el)return; el.classList.remove('positive','negative'); if(Number(n)<0)el.classList.add('negative'); else if(Number(n)>0)el.classList.add('positive'); }
 function render(){ $('salaryInput').value=fmt(settings.salary_amount); $('openingInput').value=fmt(settings.opening_balance); renderList('incomeList','income'); renderList('adjustmentList','adjustment'); renderList('expenseList','expense'); const t=calcTotals(settings,items); $('incomeTotal').textContent=fmt(t.income); $('balanceIncome').textContent=fmt(t.income); $('balanceExpense').textContent=t.expense?'-'+fmt(t.expense):'0'; $('expenseTotal').textContent=fmt(t.expense); $('balanceTotal').textContent=fmt(t.balance); if($('saldoValue'))$('saldoValue').textContent=fmt(t.balance); setAmountClass($('incomeTotal'),t.income); setAmountClass($('balanceIncome'),t.income); setAmountClass($('balanceExpense'),-t.expense); setAmountClass($('expenseTotal'),t.expense); setAmountClass($('balanceTotal'),t.balance); setAmountClass($('saldoValue'),t.balance);
   forceMoneyInputsTextKeyboard();
+
+  attachOpeningManualSave();
 }
 function renderList(id,section){const el=$(id);el.innerHTML='';items.filter(x=>x.section===section).forEach(item=>{const row=document.createElement('div');row.className='item-row';const label=document.createElement('input');label.value=item.label;label.placeholder='Tekst';const amount=document.createElement('input');amount.value=fmt(item.amount);amount.inputMode='decimal';const del=document.createElement('button');del.className='del';del.textContent='×';del.onclick=()=>deleteItem(item.id);label.onchange=()=>updateItem(item.id,{label:label.value});amount.onchange=()=>updateItem(item.id,{amount:parseAmount(amount.value)});const right=document.createElement('div');right.style.display='grid';right.style.gridTemplateColumns='1fr 24px';right.style.alignItems='center';right.append(amount,del);row.append(label,right);el.appendChild(row)})}
 async function updateSettings(patch){const {data,error}=await sb.from('month_settings').update(patch).eq('id',settings.id).select('*').single(); if(error){alert('Databasefejl: '+error.message);return} settings=data; render()}
@@ -192,6 +194,17 @@ window.addEventListener('load',()=>{
 
 async function syncOpeningFromPreviousMonth(){
   if(!user || month <= 1 || !settings) return;
+
+  const hasPrevData = await previousMonthHasBudgetData();
+
+  // Vigtigt:
+  // Hvis forrige måned er tom, må appen ikke overskrive et manuelt indtastet beløb.
+  if(!hasPrevData){
+    if($('openingLabel')) $('openingLabel').textContent = prevMonthTransferLabel();
+    if($('openingInput')) $('openingInput').value = fmt(settings.opening_balance || 0);
+    return;
+  }
+
   const correctOpening = await calcPreviousMonthBalanceForOpening();
   settings.opening_balance = correctOpening;
 
@@ -217,3 +230,53 @@ window.addEventListener('focus', async ()=>{
 document.addEventListener('visibilitychange', async ()=>{
   if(!document.hidden && user) await syncOpeningFromPreviousMonth();
 });
+
+
+async function previousMonthHasBudgetData(){
+  if(!user || month <= 1) return false;
+  const prevM = month - 1;
+  const prevKey = monthKey(year, prevM);
+
+  const ms = await sb.from('month_settings')
+    .select('salary_amount,opening_balance')
+    .eq('user_id', user.id)
+    .eq('month_key', prevKey)
+    .maybeSingle();
+
+  const bi = await sb.from('budget_items')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('month_key', prevKey)
+    .limit(1);
+
+  if(ms.error || bi.error) return false;
+
+  const s = ms.data || {};
+  const hasSettingsAmount = Number(s.salary_amount || 0) !== 0 || Number(s.opening_balance || 0) !== 0;
+  const hasItems = (bi.data || []).length > 0;
+
+  return hasSettingsAmount || hasItems;
+}
+
+
+function attachOpeningManualSave(){
+  const input = $('openingInput');
+  if(!input || input.dataset.manualSaveAttached === '1') return;
+  input.dataset.manualSaveAttached = '1';
+
+  input.addEventListener('change', async ()=>{
+    const value = parseAmountLoose(input.value);
+    settings.opening_balance = value;
+
+    await sb.from('month_settings').upsert({
+      user_id: user.id,
+      month_key: monthKey(year, month),
+      year: year,
+      month: month,
+      salary_amount: Number(settings.salary_amount || 0),
+      opening_balance: value
+    }, { onConflict: 'user_id,month_key' });
+
+    render();
+  });
+}
