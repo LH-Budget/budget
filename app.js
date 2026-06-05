@@ -1,4 +1,4 @@
-const VERSION='v3.6';
+const VERSION='v3.7';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -41,62 +41,59 @@ $('addIncome').onclick=()=>addItem('income');$('addExpense').onclick=()=>addItem
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});boot();
 
 
-async function transferSection(section){
-  const sectionName = section === 'income' ? 'indtægter' : section === 'expense' ? 'udgifter' : 'poster';
+async function transferSectionData(section){
   if(!user){ showError('Du er ikke logget ind'); return; }
   if(month >= 12){ alert('Der er ingen efterfølgende måneder i dette år.'); return; }
 
-  const sourceItems = items
-    .filter(x => x.section === section)
-    .map((x, i) => ({
+  const source = items
+    .filter(item => item.section === section)
+    .map((item, idx) => ({
       user_id: user.id,
       year: year,
       section: section,
-      label: x.label || '',
-      amount: Number(x.amount || 0),
-      sort_order: i + 1
+      label: item.label || '',
+      amount: Number(item.amount || 0),
+      sort_order: idx + 1
     }));
 
-  if(!sourceItems.length){
-    alert('Der er ingen data at overføre.');
+  if(source.length === 0){
+    alert('Der er ingen poster at overføre.');
     return;
   }
 
-  const ok = confirm(`Overfør ${sectionName} fra ${monthNames[month-1]} til resten af året?`);
-  if(!ok) return;
+  const name = section === 'income' ? 'indtægter' : section === 'expense' ? 'udgifter' : 'poster';
+  if(!confirm(`Overfør ${name} fra ${monthNames[month-1]} til resten af året?`)) return;
 
   for(let m = month + 1; m <= 12; m++){
     const key = monthKey(year, m);
 
-    await sb.from('budget_items')
+    const del = await sb.from('budget_items')
       .delete()
       .eq('user_id', user.id)
       .eq('month_key', key)
       .eq('section', section);
 
-    const rows = sourceItems.map((x, idx) => ({
-      ...x,
+    if(del.error){ showError(del.error.message); return; }
+
+    const rows = source.map((item, idx) => ({
+      ...item,
       month: m,
       month_key: key,
       sort_order: idx + 1
     }));
 
-    if(rows.length){
-      const {error} = await sb.from('budget_items').insert(rows);
-      if(error){
-        showError(error.message);
-        return;
-      }
-    }
+    const ins = await sb.from('budget_items').insert(rows);
+    if(ins.error){ showError(ins.error.message); return; }
   }
 
-  alert('Data er overført til resten af året.');
+  alert('Data er overført.');
 }
-
 
 
 document.addEventListener('click', async (e)=>{
   const btn = e.target.closest('.transfer-btn');
   if(!btn) return;
-  await transferSection(btn.dataset.section);
+  e.preventDefault();
+  e.stopPropagation();
+  await transferSectionData(btn.dataset.section);
 });
