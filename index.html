@@ -37,7 +37,7 @@
           <div id="loginError" class="error"></div>
         </form>
       </div>
-      <div class="version">v3.7</div>
+      <div class="version">v3.8</div>
     </section>
 
     <section id="budgetView" class="budget-view hidden">
@@ -78,25 +78,25 @@
             <div class="line editable"><span id="openingLabel">Lønkonto</span><input id="openingInput" inputmode="decimal" /></div>
           </div>
           <div id="incomeList" class="scroll-list compact"></div>
-          <button id="addIncome" class="add-btn">+ Tilføj indtægt</button>
+          <div class="action-row"><button id="addIncome" class="add-btn">+ Tilføj indtægt</button><button id="transferIncome" class="add-btn">Overfør data</button></div>
           <div class="total positive"><span>I ALT</span><strong id="incomeTotal">0</strong></div>
         </section>
 
         <section class="panel balance-panel">
-          <div class="panel-title">LØNKONTO - UDG.</div>
+          <div class="panel-title">LØNKONTO MINUS UDGIFTER</div>
           <div class="fixed-lines">
             <div class="line"><span>Indtægter</span><strong id="balanceIncome">0</strong></div>
             <div class="line negative"><span>Udgifter</span><strong id="balanceExpense">0</strong></div>
           </div>
           <div id="adjustmentList" class="scroll-list compact"></div>
-          <button id="addAdjustment" class="add-btn">+ Tilføj post</button>
+          <div class="action-row"><button id="addAdjustment" class="add-btn">+ Tilføj post</button><button id="transferAdjustment" class="add-btn">Overfør data</button></div>
           <div class="total final"><span>I ALT</span><strong id="balanceTotal">0</strong></div>
         </section>
 
         <section class="panel expense-panel">
           <div class="panel-title">UDGIFTER</div>
           <div id="expenseList" class="scroll-list expenses"></div>
-          <button id="addExpense" class="add-btn">+ Tilføj udgift</button>
+          <div class="action-row"><button id="addExpense" class="add-btn">+ Tilføj udgift</button><button id="transferExpense" class="add-btn">Overfør data</button></div>
           <div class="total final"><span>I ALT</span><strong id="expenseTotal">0</strong></div>
         </section>
       </main>
@@ -107,7 +107,7 @@
           <strong id="saldoValue">0</strong>
         </div>
       </footer>
-      <div class="version app-version">v3.7</div>
+      <div class="version app-version">v3.8</div>
     </section>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

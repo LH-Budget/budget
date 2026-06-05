@@ -1,4 +1,4 @@
-const VERSION='v3.7';
+const VERSION='v3.8';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -41,59 +41,15 @@ $('addIncome').onclick=()=>addItem('income');$('addExpense').onclick=()=>addItem
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});boot();
 
 
-async function transferSectionData(section){
-  if(!user){ showError('Du er ikke logget ind'); return; }
-  if(month >= 12){ alert('Der er ingen efterfølgende måneder i dette år.'); return; }
-
-  const source = items
-    .filter(item => item.section === section)
-    .map((item, idx) => ({
-      user_id: user.id,
-      year: year,
-      section: section,
-      label: item.label || '',
-      amount: Number(item.amount || 0),
-      sort_order: idx + 1
-    }));
-
-  if(source.length === 0){
-    alert('Der er ingen poster at overføre.');
-    return;
-  }
-
-  const name = section === 'income' ? 'indtægter' : section === 'expense' ? 'udgifter' : 'poster';
-  if(!confirm(`Overfør ${name} fra ${monthNames[month-1]} til resten af året?`)) return;
-
-  for(let m = month + 1; m <= 12; m++){
-    const key = monthKey(year, m);
-
-    const del = await sb.from('budget_items')
-      .delete()
-      .eq('user_id', user.id)
-      .eq('month_key', key)
-      .eq('section', section);
-
-    if(del.error){ showError(del.error.message); return; }
-
-    const rows = source.map((item, idx) => ({
-      ...item,
-      month: m,
-      month_key: key,
-      sort_order: idx + 1
-    }));
-
-    const ins = await sb.from('budget_items').insert(rows);
-    if(ins.error){ showError(ins.error.message); return; }
-  }
-
-  alert('Data er overført.');
+function transferNotImplemented(){
+ alert('Overfør data kommer i næste version. Denne version viser kun knapperne.');
 }
 
-
-document.addEventListener('click', async (e)=>{
-  const btn = e.target.closest('.transfer-btn');
-  if(!btn) return;
-  e.preventDefault();
-  e.stopPropagation();
-  await transferSectionData(btn.dataset.section);
+window.addEventListener('load',()=>{
+ const a=document.getElementById('transferIncome');
+ const b=document.getElementById('transferAdjustment');
+ const c=document.getElementById('transferExpense');
+ if(a) a.onclick=transferNotImplemented;
+ if(b) b.onclick=transferNotImplemented;
+ if(c) c.onclick=transferNotImplemented;
 });
