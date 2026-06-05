@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.2 PWA iPhone home-screen fix */
+/* v4.3 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v4.2: keep flex layout, use all available screen in iPhone PWA */
+/* v4.3: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.2 logo + version placement */
+/* v4.3 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.2: integrated SVG logo, matching app background, and lifted bottom row */
+/* v4.3: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.2 small logo/version fix */
+/* v4.3 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.2 smaller top logo only */
+/* v4.3 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.2: place Tilføj + Overfør side by side */
+/* v4.3: place Tilføj + Overfør side by side */
 .action-row{
   position:absolute!important;
   top:5px!important;
@@ -679,10 +679,10 @@ button,input,select{font:inherit}
   }
 }
 
-/* v4.2: overført label + negative tal fix */
+/* v4.3: overført label + negative tal fix */
 
 
-/* v4.2 minus button + input keyboard fix */
+/* v4.3 minus button + input keyboard fix */
 .minus-btn{
   margin-left:4px;
   width:24px;
@@ -708,4 +708,19 @@ button,input,select{font:inherit}
   }
 }
 
-/* v4.2: manual overført fra gemmes hvis forrige måned er tom */
+/* v4.3: manual overført fra gemmes hvis forrige måned er tom */
+
+
+/* v4.3: remove minus button, keep normal field width */
+.minus-btn,
+#openingMinusBtn{
+  display:none!important;
+}
+.line:has(#openingInput){
+  grid-template-columns:minmax(0,1fr) 118px!important;
+}
+@supports not selector(:has(*)){
+  #openingInput{
+    width:100%!important;
+  }
+}

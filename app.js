@@ -1,13 +1,5 @@
 
-function toggleOpeningMinus(){
-  const input = $('openingInput');
-  if(!input) return;
-  let v = String(input.value || '').trim();
-  if(v.startsWith('-')) v = v.slice(1);
-  else v = '-' + v;
-  input.value = v;
-  input.dispatchEvent(new Event('change', {bubbles:true}));
-}
+
 
 
 function forceMoneyInputsTextKeyboard(){
@@ -57,7 +49,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v4.2';
+const VERSION='v4.3';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -186,41 +178,10 @@ async function loadMonth(){
 }
 
 
-window.addEventListener('load',()=>{
-  const minusBtn = document.getElementById('openingMinusBtn');
-  if(minusBtn) minusBtn.onclick = toggleOpeningMinus;
-});
-
-
 async function syncOpeningFromPreviousMonth(){
-  if(!user || month <= 1 || !settings) return;
-
-  const hasPrevData = await previousMonthHasBudgetData();
-
-  // Vigtigt:
-  // Hvis forrige måned er tom, må appen ikke overskrive et manuelt indtastet beløb.
-  if(!hasPrevData){
-    if($('openingLabel')) $('openingLabel').textContent = prevMonthTransferLabel();
-    if($('openingInput')) $('openingInput').value = fmt(settings.opening_balance || 0);
-    return;
-  }
-
-  const correctOpening = await calcPreviousMonthBalanceForOpening();
-  settings.opening_balance = correctOpening;
-
-  if($('openingInput')) $('openingInput').value = fmt(correctOpening);
+  // v4.3: Manuelt indtastet "Overført fra ..." må aldrig overskrives automatisk.
   if($('openingLabel')) $('openingLabel').textContent = prevMonthTransferLabel();
-
-  await sb.from('month_settings').upsert({
-    user_id: user.id,
-    month_key: monthKey(year, month),
-    year: year,
-    month: month,
-    salary_amount: Number(settings.salary_amount || 0),
-    opening_balance: correctOpening
-  }, { onConflict: 'user_id,month_key' });
-
-  render();
+  if($('openingInput')) $('openingInput').value = fmt(settings?.opening_balance || 0);
 }
 
 
