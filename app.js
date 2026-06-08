@@ -23,7 +23,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v5.4';
+const VERSION='v5.5';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -276,22 +276,34 @@ async function loadCustomBudgetList(){
 async function createCustomBudget(){
   const activeUser = await getActiveUserForCustomBudget();
   if(!activeUser || !activeUser.id){
-    await lhAlert('Du er ikke logget ind i LH Budget.');
+    alert('Du er ikke logget ind i LH Budget.');
     return;
   }
 
-  const title = await lhPrompt('Navn på budget?');
+  const title = prompt('Navn på budget?');
   if(!title || !title.trim()) return;
 
+  const payload = {
+    user_id: activeUser.id,
+    title: title.trim()
+  };
+
   const result = await sb.from('custom_budgets')
-    .insert({user_id:activeUser.id,title:title.trim()})
+    .insert(payload)
     .select('id,title,user_id')
     .single();
 
   if(result.error){
-    await lhAlert('Budget kunne ikke gemmes i Supabase.
+    alert(
+      'Budget kunne ikke gemmes i Supabase.\n\n' +
+      'Tjek at supabase-custom-budgets-v5.0.sql er kørt.\n\n' +
+      result.error.message
+    );
+    return;
+  }
 
-' + result.error.message);
+  if(!result.data || !result.data.id){
+    alert('Budget blev ikke gemt. Supabase returnerede ingen data.');
     return;
   }
 
@@ -416,13 +428,13 @@ function escapeHtml(str){
 
 async function addCustomSection(){
   if(!customBudgetId) return;
-  const title = await lhPrompt('Navn på sektion?');
-  if(!title || !title.trim()) return;
+  const title = prompt('Navn på sektion?');
+  if(!title) return;
 
   const order = customSections.length + 1;
   const {error} = await sb.from('custom_budget_sections')
     .insert({user_id:user.id,budget_id:customBudgetId,title:title.trim(),sort_order:order});
-  if(error){ await lhAlert(error.message); return; }
+  if(error){ showError(error.message); return; }
 
   await loadCustomBudgetData();
   renderCustomBudget();
@@ -439,28 +451,27 @@ async function addCustomItem(sectionId){
 }
 
 async function deleteCustomItem(id){
-  if(!(await lhConfirm('Slet linjen?'))) return;
+  if(!confirm('Slet linjen?')) return;
   const {error} = await sb.from('custom_budget_items').delete().eq('id', id).eq('user_id', user.id);
-  if(error){ await lhAlert(error.message); return; }
+  if(error){ showError(error.message); return; }
   await loadCustomBudgetData();
   renderCustomBudget();
 }
 
 async function deleteCustomSection(id){
-  if(!(await lhConfirm('Slet sektion og alle linjer?'))) return;
+  if(!confirm('Slet sektion og alle linjer?')) return;
   const {error} = await sb.from('custom_budget_sections').delete().eq('id', id).eq('user_id', user.id);
-  if(error){ await lhAlert(error.message); return; }
+  if(error){ showError(error.message); return; }
   await loadCustomBudgetData();
   renderCustomBudget();
 }
 
 async function deleteCurrentCustomBudget(){
   if(!customBudgetId) return;
-  if(!(await lhConfirm('Slet hele budgettet?'))) return;
+  if(!confirm('Slet hele budgettet?')) return;
   const {error} = await sb.from('custom_budgets').delete().eq('id', customBudgetId).eq('user_id', user.id);
-  if(error){ await lhAlert(error.message); return; }
+  if(error){ showError(error.message); return; }
   closeCustomBudget();
-  await loadCustomBudgetList();
 }
 
 function closeCustomBudget(){
@@ -490,78 +501,27 @@ window.addEventListener('load',()=>{
 });
 
 
-function lhPrompt(message, defaultValue=''){
-  return new Promise(resolve=>{
-    const box = $('lhDialog');
-    const input = $('lhDialogInput');
-    $('lhDialogTitle').textContent = 'LH Budget';
-    $('lhDialogMessage').textContent = message;
-    input.classList.remove('hidden');
-    input.value = defaultValue || '';
-    $('lhDialogCancel').classList.remove('hidden');
-    box.classList.remove('hidden');
-
-    setTimeout(()=>input.focus(), 50);
-
-    const done = (value)=>{
-      box.classList.add('hidden');
-      $('lhDialogOk').onclick = null;
-      $('lhDialogCancel').onclick = null;
-      resolve(value);
-    };
-    $('lhDialogOk').onclick = ()=>done(input.value);
-    $('lhDialogCancel').onclick = ()=>done(null);
-  });
-}
-
-function lhConfirm(message){
-  return new Promise(resolve=>{
-    const box = $('lhDialog');
-    $('lhDialogTitle').textContent = 'LH Budget';
-    $('lhDialogMessage').textContent = message;
-    $('lhDialogInput').classList.add('hidden');
-    $('lhDialogCancel').classList.remove('hidden');
-    box.classList.remove('hidden');
-
-    const done = (value)=>{
-      box.classList.add('hidden');
-      $('lhDialogOk').onclick = null;
-      $('lhDialogCancel').onclick = null;
-      resolve(value);
-    };
-    $('lhDialogOk').onclick = ()=>done(true);
-    $('lhDialogCancel').onclick = ()=>done(false);
-  });
-}
-
-function lhAlert(message){
-  return new Promise(resolve=>{
-    const box = $('lhDialog');
-    $('lhDialogTitle').textContent = 'LH Budget';
-    $('lhDialogMessage').textContent = message;
-    $('lhDialogInput').classList.add('hidden');
-    $('lhDialogCancel').classList.add('hidden');
-    box.classList.remove('hidden');
-
-    $('lhDialogOk').onclick = ()=>{
-      box.classList.add('hidden');
-      $('lhDialogOk').onclick = null;
-      resolve();
-    };
-  });
-}
-
+/* v5.5 refresh button */
 async function refreshCurrentView(){
-  if(customBudgetId){
-    await loadCustomBudgetData();
-    renderCustomBudget();
-  }else if($('sideMenu') && !$('sideMenu').classList.contains('hidden')){
-    await loadCustomBudgetList();
-  }else if(typeof loadMonth === 'function'){
-    await loadMonth();
+  try{
+    if(customBudgetId){
+      await loadCustomBudgetData();
+      renderCustomBudget();
+      return;
+    }
+
+    if($('sideMenu') && !$('sideMenu').classList.contains('hidden')){
+      await loadCustomBudgetList();
+      return;
+    }
+
+    if(typeof loadMonth === 'function'){
+      await loadMonth();
+    }
+  }catch(e){
+    console.error(e);
   }
 }
-
 
 window.addEventListener('load',()=>{
   const buttons = document.querySelectorAll('.topbar .icon-btn');
