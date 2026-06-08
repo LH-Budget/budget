@@ -23,7 +23,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v5.1';
+const VERSION='v5.2';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -211,6 +211,23 @@ window.addEventListener('load',()=>{
 
 
 
+
+async function getActiveUserForCustomBudget(){
+  if(user && user.id) return user;
+  const sessionResult = await sb.auth.getSession();
+  const sessionUser = sessionResult?.data?.session?.user || null;
+  if(sessionUser){
+    user = sessionUser;
+    return user;
+  }
+  const userResult = await sb.auth.getUser();
+  if(userResult?.data?.user){
+    user = userResult.data.user;
+    return user;
+  }
+  return null;
+}
+
 /* v5.0 custom budgets */
 let customBudgetId = null;
 let customBudget = null;
@@ -223,6 +240,7 @@ function customMoney(n){
 
 function showSideMenu(){
   $('sideMenu').classList.remove('hidden');
+  if($('customBudgetStatus')) $('customBudgetStatus').textContent='';
   loadCustomBudgetList();
 }
 function hideSideMenu(){
@@ -230,15 +248,22 @@ function hideSideMenu(){
 }
 
 async function loadCustomBudgetList(){
-  if(!user) return;
+  const activeUser = await getActiveUserForCustomBudget();
+  if(!activeUser || !activeUser.id) return;
+
   const {data,error} = await sb.from('custom_budgets')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('user_id', activeUser.id)
     .order('created_at', {ascending:false});
-  if(error){ showError(error.message); return; }
+
+  if(error){
+    alert('Budgetlisten kunne ikke hentes.\n\n' + error.message);
+    return;
+  }
 
   const box = $('customBudgetList');
   box.innerHTML = '';
+
   (data || []).forEach(b=>{
     const row = document.createElement('button');
     row.className = 'budget-list-item';
@@ -249,26 +274,64 @@ async function loadCustomBudgetList(){
 }
 
 async function createCustomBudget(){
-  if(!user) return;
-  const title = prompt('Navn på budget?');
-  if(!title) return;
+  const activeUser = await getActiveUserForCustomBudget();
+  if(!activeUser || !activeUser.id){
+    alert('Du er ikke logget ind i LH Budget.');
+    return;
+  }
 
-  const {data,error} = await sb.from('custom_budgets')
-    .insert({user_id:user.id,title:title.trim()})
-    .select()
+  const title = prompt('Navn på budget?');
+  if(!title || !title.trim()) return;
+
+  const payload = {
+    user_id: activeUser.id,
+    title: title.trim()
+  };
+
+  const result = await sb.from('custom_budgets')
+    .insert(payload)
+    .select('id,title,user_id')
     .single();
 
-  if(error){ alert('Budget kunne ikke gemmes. Har du kørt supabase-custom-budgets-v5.0.sql?\n\n' + error.message); return; }
-  if(!data || !data.id){ alert('Budget blev ikke oprettet. Tjek Supabase SQL-tabellerne.'); return; }
-  await openCustomBudget(data.id);
+  if(result.error){
+    alert(
+      'Budget kunne ikke gemmes i Supabase.\n\n' +
+      'Tjek at supabase-custom-budgets-v5.0.sql er kørt.\n\n' +
+      result.error.message
+    );
+    return;
+  }
+
+  if(!result.data || !result.data.id){
+    alert('Budget blev ikke gemt. Supabase returnerede ingen data.');
+    return;
+  }
+
+  await loadCustomBudgetList();
+  await openCustomBudget(result.data.id);
 }
 
 async function openCustomBudget(id){
+  const activeUser = await getActiveUserForCustomBudget();
+  if(!activeUser || !activeUser.id){
+    alert('Du er ikke logget ind i LH Budget.');
+    return;
+  }
+
   customBudgetId = id;
   hideSideMenu();
 
-  const b = await sb.from('custom_budgets').select('*').eq('id', id).eq('user_id', user.id).single();
-  if(b.error){ alert('Budget kunne ikke åbnes.\n\n' + b.error.message); return; }
+  const b = await sb.from('custom_budgets')
+    .select('*')
+    .eq('id', id)
+    .eq('user_id', activeUser.id)
+    .single();
+
+  if(b.error){
+    alert('Budget kunne ikke åbnes.\n\n' + b.error.message);
+    return;
+  }
+
   customBudget = b.data;
 
   await loadCustomBudgetData();

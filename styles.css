@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.1 PWA iPhone home-screen fix */
+/* v5.2 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v5.1: keep flex layout, use all available screen in iPhone PWA */
+/* v5.2: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.1 logo + version placement */
+/* v5.2 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.1: integrated SVG logo, matching app background, and lifted bottom row */
+/* v5.2: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.1 small logo/version fix */
+/* v5.2 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.1 smaller top logo only */
+/* v5.2 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.1: place Tilføj + Overfør side by side */
+/* v5.2: place Tilføj + Overfør side by side */
 .action-row{
   position:absolute!important;
   top:5px!important;
@@ -680,13 +680,13 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.1: no auto overwrite of Overført fra, no minus button */
+/* v5.2: no auto overwrite of Overført fra, no minus button */
 .minus-btn,#openingMinusBtn{display:none!important;}
 
-/* v5.1: chain propagation of Overført fra */
+/* v5.2: chain propagation of Overført fra */
 
 
-/* v5.1 custom budgets */
+/* v5.2 custom budgets */
 .side-menu.hidden,.custom-view.hidden{display:none!important;}
 .side-menu{position:fixed;inset:0;z-index:1000;}
 .side-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);}
@@ -757,3 +757,12 @@ button,input,select{font:inherit}
 .section-total strong{text-align:right;}
 .custom-actions{flex:0 0 auto;}
 .custom-actions button{width:100%;height:38px;font-size:14px;font-weight:700;}
+
+
+/* v5.2 status line */
+.custom-status{
+  min-height:18px;
+  color:#ff5555;
+  font-size:12px;
+  margin:2px 0 8px;
+}
