@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.6 PWA iPhone home-screen fix */
+/* v5.0 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v4.6: keep flex layout, use all available screen in iPhone PWA */
+/* v5.0: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.6 logo + version placement */
+/* v5.0 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.6: integrated SVG logo, matching app background, and lifted bottom row */
+/* v5.0: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.6 small logo/version fix */
+/* v5.0 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.6 smaller top logo only */
+/* v5.0 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.6: place Tilføj + Overfør side by side */
+/* v5.0: place Tilføj + Overfør side by side */
 .action-row{
   position:absolute!important;
   top:5px!important;
@@ -680,28 +680,80 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.6: no auto overwrite of Overført fra, no minus button */
+/* v5.0: no auto overwrite of Overført fra, no minus button */
 .minus-btn,#openingMinusBtn{display:none!important;}
 
-/* v4.6: chain propagation of Overført fra */
+/* v5.0: chain propagation of Overført fra */
 
 
-/* v4.6: grøn ramme omkring I ALT i Lønkonto minus udgifter */
-.balance-panel .total strong{
-  display:inline-block!important;
-  justify-self:end!important;
-  min-width:116px!important;
-  padding:3px 10px!important;
-  border:1px solid rgba(94,225,90,.75)!important;
-  border-radius:12px!important;
-  background:rgba(94,225,90,.08)!important;
-  box-shadow:0 0 10px rgba(94,225,90,.16)!important;
-  color:var(--green)!important;
-  text-align:right!important;
+/* v5.0 custom budgets */
+.side-menu.hidden,.custom-view.hidden{display:none!important;}
+.side-menu{position:fixed;inset:0;z-index:1000;}
+.side-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);}
+.side-panel{
+  position:absolute;left:0;top:0;bottom:0;
+  width:min(310px,82vw);
+  background:linear-gradient(180deg,#111312,#060707);
+  border-right:1px solid #303030;
+  padding:calc(env(safe-area-inset-top) + 16px) 14px 18px;
+  color:var(--text);
 }
-.balance-panel .total strong.negative{
-  border-color:rgba(255,85,85,.75)!important;
-  background:rgba(255,85,85,.08)!important;
-  box-shadow:0 0 10px rgba(255,85,85,.16)!important;
-  color:var(--red)!important;
+.side-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;color:var(--gold);font-size:22px;font-weight:800;}
+.side-close{background:none;border:0;color:var(--gold);font-size:28px;}
+.menu-new{
+  width:100%;height:40px;border-radius:12px;border:1px solid rgba(217,183,101,.45);
+  background:#080808;color:var(--gold);font-weight:700;margin-bottom:12px;
 }
+.budget-list{display:grid;gap:8px;}
+.budget-list-item{
+  text-align:left;width:100%;min-height:42px;border-radius:12px;border:1px solid #303030;
+  background:#090909;color:var(--text);padding:0 12px;font-size:16px;
+}
+
+.custom-view{
+  position:fixed;inset:0;z-index:900;
+  height:100dvh;overflow:hidden;
+  background:radial-gradient(circle at top,#171817,#050505 58%);
+  color:var(--text);
+  padding:calc(env(safe-area-inset-top) + 8px) 12px 10px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.custom-top{
+  flex:0 0 auto;display:grid;grid-template-columns:38px 1fr 58px;gap:8px;align-items:center;
+}
+.custom-back,.custom-delete{
+  height:36px;border-radius:10px;border:1px solid rgba(217,183,101,.35);
+  background:#080808;color:var(--gold);
+}
+.custom-back{font-size:28px;line-height:24px;}
+.custom-delete{font-size:13px;color:var(--red);border-color:rgba(255,85,85,.35);}
+.custom-title-input{
+  height:40px;border-radius:12px;border:1px solid #343434;background:#050505;color:var(--text);
+  padding:0 12px;font-weight:800;font-size:19px;text-align:center;
+}
+.custom-sections{
+  flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:grid;gap:10px;align-content:start;
+}
+.custom-card{
+  border:1px solid #303030;border-radius:14px;background:linear-gradient(180deg,rgba(18,19,19,.96),rgba(8,9,9,.96));
+  padding:10px;
+}
+.custom-card-head{display:grid;grid-template-columns:1fr 64px 30px;gap:6px;align-items:center;margin-bottom:8px;}
+.section-title{
+  border:0;background:transparent;color:var(--gold);font-weight:800;font-size:18px;min-width:0;
+}
+.section-add,.section-del,.custom-actions button{
+  height:30px;border-radius:9px;border:1px solid rgba(217,183,101,.35);background:#080808;color:var(--gold);font-size:12px;
+}
+.section-del,.custom-del{color:#a78571;}
+.section-lines{display:grid;gap:3px;}
+.custom-line{display:grid;grid-template-columns:minmax(0,1fr) 110px 24px;gap:5px;align-items:center;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:3px;}
+.custom-line input{
+  height:28px;border:0;border-radius:8px;background:#020202;color:var(--text);padding:0 8px;min-width:0;
+}
+.custom-amount{text-align:right;}
+.custom-del{height:28px;border:0;background:transparent;font-size:20px;}
+.section-total{display:grid;grid-template-columns:1fr 130px;margin-top:8px;padding-top:7px;border-top:1px solid rgba(255,255,255,.14);font-weight:800;}
+.section-total strong{text-align:right;}
+.custom-actions{flex:0 0 auto;}
+.custom-actions button{width:100%;height:38px;font-size:14px;font-weight:700;}

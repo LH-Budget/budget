@@ -37,7 +37,7 @@
           <div id="loginError" class="error"></div>
         </form>
       </div>
-      <div class="version">v4.6</div>
+      <div class="version">v5.0</div>
     </section>
 
     <section id="budgetView" class="budget-view hidden">
@@ -107,10 +107,37 @@
           <strong id="saldoValue">0</strong>
         </div>
       </footer>
-      <div class="version app-version">v4.6</div>
+      <div class="version app-version">v5.0</div>
     </section>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
+
+  <div id="sideMenu" class="side-menu hidden">
+    <div class="side-backdrop" id="sideBackdrop"></div>
+    <aside class="side-panel">
+      <div class="side-head">
+        <strong>Budgetter</strong>
+        <button id="closeMenu" class="side-close">×</button>
+      </div>
+      <button id="newCustomBudget" class="menu-new">+ Nyt budget</button>
+      <div id="customBudgetList" class="budget-list"></div>
+    </aside>
+  </div>
+
+  <section id="customBudgetView" class="custom-view hidden">
+    <div class="custom-top">
+      <button id="backToMain" class="custom-back">‹</button>
+      <input id="customBudgetTitle" class="custom-title-input" placeholder="Overskrift">
+      <button id="deleteCustomBudget" class="custom-delete">Slet</button>
+    </div>
+
+    <div id="customSections" class="custom-sections"></div>
+
+    <div class="custom-actions">
+      <button id="addCustomSection">+ Sektion</button>
+    </div>
+  </section>
+
 </body>
 </html>

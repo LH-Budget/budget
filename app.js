@@ -23,7 +23,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v4.6';
+const VERSION='v5.0';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -207,4 +207,231 @@ window.addEventListener('load',()=>{
   document.addEventListener('blur', (e)=>{
     if(e.target && e.target.tagName === 'INPUT') schedulePropagate();
   }, true);
+});
+
+
+
+/* v5.0 custom budgets */
+let customBudgetId = null;
+let customBudget = null;
+let customSections = [];
+let customItems = [];
+
+function customMoney(n){
+  return fmt(Number(n || 0));
+}
+
+function showSideMenu(){
+  $('sideMenu').classList.remove('hidden');
+  loadCustomBudgetList();
+}
+function hideSideMenu(){
+  $('sideMenu').classList.add('hidden');
+}
+
+async function loadCustomBudgetList(){
+  if(!user) return;
+  const {data,error} = await sb.from('custom_budgets')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', {ascending:false});
+  if(error){ showError(error.message); return; }
+
+  const box = $('customBudgetList');
+  box.innerHTML = '';
+  (data || []).forEach(b=>{
+    const row = document.createElement('button');
+    row.className = 'budget-list-item';
+    row.textContent = b.title || 'Uden navn';
+    row.onclick = ()=>openCustomBudget(b.id);
+    box.appendChild(row);
+  });
+}
+
+async function createCustomBudget(){
+  if(!user) return;
+  const title = prompt('Navn på budget?');
+  if(!title) return;
+
+  const {data,error} = await sb.from('custom_budgets')
+    .insert({user_id:user.id,title:title.trim()})
+    .select()
+    .single();
+
+  if(error){ showError(error.message); return; }
+  await openCustomBudget(data.id);
+}
+
+async function openCustomBudget(id){
+  customBudgetId = id;
+  hideSideMenu();
+
+  const b = await sb.from('custom_budgets').select('*').eq('id', id).eq('user_id', user.id).single();
+  if(b.error){ showError(b.error.message); return; }
+  customBudget = b.data;
+
+  await loadCustomBudgetData();
+
+  $('customBudgetTitle').value = customBudget.title || '';
+  document.querySelector('.budget-view').classList.add('hidden');
+  $('customBudgetView').classList.remove('hidden');
+  renderCustomBudget();
+}
+
+async function loadCustomBudgetData(){
+  const s = await sb.from('custom_budget_sections')
+    .select('*')
+    .eq('budget_id', customBudgetId)
+    .eq('user_id', user.id)
+    .order('sort_order', {ascending:true});
+
+  const i = await sb.from('custom_budget_items')
+    .select('*')
+    .eq('budget_id', customBudgetId)
+    .eq('user_id', user.id)
+    .order('sort_order', {ascending:true});
+
+  if(s.error){ showError(s.error.message); return; }
+  if(i.error){ showError(i.error.message); return; }
+
+  customSections = s.data || [];
+  customItems = i.data || [];
+}
+
+function renderCustomBudget(){
+  const root = $('customSections');
+  root.innerHTML = '';
+
+  customSections.forEach(section=>{
+    const items = customItems.filter(x=>x.section_id === section.id);
+    const total = items.reduce((sum,x)=>sum+Number(x.amount||0),0);
+
+    const card = document.createElement('div');
+    card.className = 'custom-card';
+
+    card.innerHTML = `
+      <div class="custom-card-head">
+        <input class="section-title" value="${escapeHtml(section.title || '')}">
+        <button class="section-add">+ Linje</button>
+        <button class="section-del">×</button>
+      </div>
+      <div class="section-lines"></div>
+      <div class="section-total"><span>I alt</span><strong>${customMoney(total)}</strong></div>
+    `;
+
+    const titleInput = card.querySelector('.section-title');
+    titleInput.onchange = async ()=>{
+      await sb.from('custom_budget_sections').update({title:titleInput.value}).eq('id', section.id).eq('user_id', user.id);
+    };
+
+    card.querySelector('.section-add').onclick = ()=>addCustomItem(section.id);
+    card.querySelector('.section-del').onclick = ()=>deleteCustomSection(section.id);
+
+    const lines = card.querySelector('.section-lines');
+    items.forEach(item=>{
+      const row = document.createElement('div');
+      row.className = 'custom-line';
+      row.innerHTML = `
+        <input class="custom-label" value="${escapeHtml(item.label || '')}" placeholder="Beskrivelse">
+        <input class="custom-amount" type="text" inputmode="text" value="${customMoney(item.amount)}">
+        <button class="custom-del">×</button>
+      `;
+
+      const label = row.querySelector('.custom-label');
+      const amount = row.querySelector('.custom-amount');
+
+      label.onchange = async ()=>{
+        await sb.from('custom_budget_items').update({label:label.value}).eq('id', item.id).eq('user_id', user.id);
+      };
+
+      amount.onchange = async ()=>{
+        await sb.from('custom_budget_items').update({amount:parseAmountLoose(amount.value)}).eq('id', item.id).eq('user_id', user.id);
+        await loadCustomBudgetData();
+        renderCustomBudget();
+      };
+
+      row.querySelector('.custom-del').onclick = ()=>deleteCustomItem(item.id);
+      lines.appendChild(row);
+    });
+
+    root.appendChild(card);
+  });
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+}
+
+async function addCustomSection(){
+  if(!customBudgetId) return;
+  const title = prompt('Navn på sektion?');
+  if(!title) return;
+
+  const order = customSections.length + 1;
+  const {error} = await sb.from('custom_budget_sections')
+    .insert({user_id:user.id,budget_id:customBudgetId,title:title.trim(),sort_order:order});
+  if(error){ showError(error.message); return; }
+
+  await loadCustomBudgetData();
+  renderCustomBudget();
+}
+
+async function addCustomItem(sectionId){
+  const order = customItems.filter(x=>x.section_id === sectionId).length + 1;
+  const {error} = await sb.from('custom_budget_items')
+    .insert({user_id:user.id,budget_id:customBudgetId,section_id:sectionId,label:'Ny linje',amount:0,sort_order:order});
+  if(error){ showError(error.message); return; }
+
+  await loadCustomBudgetData();
+  renderCustomBudget();
+}
+
+async function deleteCustomItem(id){
+  if(!confirm('Slet linjen?')) return;
+  const {error} = await sb.from('custom_budget_items').delete().eq('id', id).eq('user_id', user.id);
+  if(error){ showError(error.message); return; }
+  await loadCustomBudgetData();
+  renderCustomBudget();
+}
+
+async function deleteCustomSection(id){
+  if(!confirm('Slet sektion og alle linjer?')) return;
+  const {error} = await sb.from('custom_budget_sections').delete().eq('id', id).eq('user_id', user.id);
+  if(error){ showError(error.message); return; }
+  await loadCustomBudgetData();
+  renderCustomBudget();
+}
+
+async function deleteCurrentCustomBudget(){
+  if(!customBudgetId) return;
+  if(!confirm('Slet hele budgettet?')) return;
+  const {error} = await sb.from('custom_budgets').delete().eq('id', customBudgetId).eq('user_id', user.id);
+  if(error){ showError(error.message); return; }
+  closeCustomBudget();
+}
+
+function closeCustomBudget(){
+  customBudgetId = null;
+  customBudget = null;
+  customSections = [];
+  customItems = [];
+  $('customBudgetView').classList.add('hidden');
+  document.querySelector('.budget-view').classList.remove('hidden');
+}
+
+window.addEventListener('load',()=>{
+  const menuBtn = document.querySelector('.icon-btn');
+  if(menuBtn) menuBtn.onclick = showSideMenu;
+
+  $('sideBackdrop')?.addEventListener('click', hideSideMenu);
+  $('closeMenu')?.addEventListener('click', hideSideMenu);
+  $('newCustomBudget')?.addEventListener('click', createCustomBudget);
+  $('backToMain')?.addEventListener('click', closeCustomBudget);
+  $('addCustomSection')?.addEventListener('click', addCustomSection);
+  $('deleteCustomBudget')?.addEventListener('click', deleteCurrentCustomBudget);
+
+  $('customBudgetTitle')?.addEventListener('change', async ()=>{
+    if(!customBudgetId) return;
+    await sb.from('custom_budgets').update({title:$('customBudgetTitle').value}).eq('id', customBudgetId).eq('user_id', user.id);
+  });
 });
