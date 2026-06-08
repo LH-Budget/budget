@@ -23,7 +23,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v5.0';
+const VERSION='v5.1';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -258,7 +258,8 @@ async function createCustomBudget(){
     .select()
     .single();
 
-  if(error){ showError(error.message); return; }
+  if(error){ alert('Budget kunne ikke gemmes. Har du kørt supabase-custom-budgets-v5.0.sql?\n\n' + error.message); return; }
+  if(!data || !data.id){ alert('Budget blev ikke oprettet. Tjek Supabase SQL-tabellerne.'); return; }
   await openCustomBudget(data.id);
 }
 
@@ -267,7 +268,7 @@ async function openCustomBudget(id){
   hideSideMenu();
 
   const b = await sb.from('custom_budgets').select('*').eq('id', id).eq('user_id', user.id).single();
-  if(b.error){ showError(b.error.message); return; }
+  if(b.error){ alert('Budget kunne ikke åbnes.\n\n' + b.error.message); return; }
   customBudget = b.data;
 
   await loadCustomBudgetData();
@@ -291,8 +292,8 @@ async function loadCustomBudgetData(){
     .eq('user_id', user.id)
     .order('sort_order', {ascending:true});
 
-  if(s.error){ showError(s.error.message); return; }
-  if(i.error){ showError(i.error.message); return; }
+  if(s.error){ alert('Sektioner kunne ikke hentes.\n\n' + s.error.message); return; }
+  if(i.error){ alert('Linjer kunne ikke hentes.\n\n' + i.error.message); return; }
 
   customSections = s.data || [];
   customItems = i.data || [];
