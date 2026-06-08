@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.6 PWA iPhone home-screen fix */
+/* v5.7 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v5.6: keep flex layout, use all available screen in iPhone PWA */
+/* v5.7: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.6 logo + version placement */
+/* v5.7 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.6: integrated SVG logo, matching app background, and lifted bottom row */
+/* v5.7: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.6 small logo/version fix */
+/* v5.7 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.6 smaller top logo only */
+/* v5.7 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.6: place Tilføj + Overfør side by side */
+/* v5.7: place Tilføj + Overfør side by side */
 .action-row{
   position:absolute!important;
   top:5px!important;
@@ -680,13 +680,13 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.6: no auto overwrite of Overført fra, no minus button */
+/* v5.7: no auto overwrite of Overført fra, no minus button */
 .minus-btn,#openingMinusBtn{display:none!important;}
 
-/* v5.6: chain propagation of Overført fra */
+/* v5.7: chain propagation of Overført fra */
 
 
-/* v5.6 custom budgets */
+/* v5.7 custom budgets */
 .side-menu.hidden,.custom-view.hidden{display:none!important;}
 .side-menu{position:fixed;inset:0;z-index:1000;}
 .side-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);}
@@ -759,7 +759,7 @@ button,input,select{font:inherit}
 .custom-actions button{width:100%;height:38px;font-size:14px;font-weight:700;}
 
 
-/* v5.6 status line */
+/* v5.7 status line */
 .custom-status{
   min-height:18px;
   color:#ff5555;
@@ -768,7 +768,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.6 samlet total på custom-budgetter */
+/* v5.7 samlet total på custom-budgetter */
 .custom-grand-total{
   flex:0 0 auto;
   display:grid;
@@ -793,4 +793,82 @@ button,input,select{font:inherit}
   font-size:28px;
   line-height:30px;
   text-align:right;
+}
+
+/* v5.7 LH custom dialog */
+.lh-dialog.hidden{display:none!important;}
+.lh-dialog{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+}
+.lh-dialog-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(4px);
+}
+.lh-dialog-card{
+  position:relative;
+  width:min(360px,92vw);
+  border:1px solid rgba(217,183,101,.34);
+  border-radius:22px;
+  background:linear-gradient(180deg,#141515,#070808);
+  box-shadow:0 28px 90px rgba(0,0,0,.65);
+  padding:20px;
+  color:var(--text);
+}
+.lh-dialog-title{
+  color:var(--gold);
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+.lh-dialog-message{
+  font-size:16px;
+  line-height:1.35;
+  color:#ddd8ca;
+  margin-bottom:14px;
+  white-space:pre-line;
+}
+.lh-dialog-input{
+  width:100%;
+  height:44px;
+  border-radius:12px;
+  border:1px solid #393939;
+  background:#050505;
+  color:var(--text);
+  padding:0 12px;
+  font-size:17px;
+  margin-bottom:16px;
+}
+.lh-dialog-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.lh-dialog-cancel,.lh-dialog-ok{
+  height:42px;
+  border-radius:13px;
+  font-weight:800;
+}
+.lh-dialog-cancel{
+  border:1px solid #383838;
+  background:#0a0a0a;
+  color:#cfc7b6;
+}
+.lh-dialog-ok{
+  border:0;
+  background:linear-gradient(135deg,#f5d98a,#b48d3c);
+  color:#14100a;
+}
+.lh-dialog-cancel.hidden{
+  display:none!important;
+}
+.lh-dialog-cancel.hidden + .lh-dialog-ok{
+  grid-column:1 / -1;
 }
