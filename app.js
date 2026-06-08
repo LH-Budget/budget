@@ -23,7 +23,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v5.2';
+const VERSION='v5.3';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -257,7 +257,7 @@ async function loadCustomBudgetList(){
     .order('created_at', {ascending:false});
 
   if(error){
-    alert('Budgetlisten kunne ikke hentes.\n\n' + error.message);
+    await lhAlert('Budgetlisten kunne ikke hentes.\n\n' + error.message);
     return;
   }
 
@@ -276,11 +276,11 @@ async function loadCustomBudgetList(){
 async function createCustomBudget(){
   const activeUser = await getActiveUserForCustomBudget();
   if(!activeUser || !activeUser.id){
-    alert('Du er ikke logget ind i LH Budget.');
+    await lhAlert('Du er ikke logget ind i LH Budget.');
     return;
   }
 
-  const title = prompt('Navn på budget?');
+  const title = await lhPrompt('Navn på budget?');
   if(!title || !title.trim()) return;
 
   const payload = {
@@ -303,7 +303,7 @@ async function createCustomBudget(){
   }
 
   if(!result.data || !result.data.id){
-    alert('Budget blev ikke gemt. Supabase returnerede ingen data.');
+    await lhAlert('Budget blev ikke gemt. Supabase returnerede ingen data.');
     return;
   }
 
@@ -314,7 +314,7 @@ async function createCustomBudget(){
 async function openCustomBudget(id){
   const activeUser = await getActiveUserForCustomBudget();
   if(!activeUser || !activeUser.id){
-    alert('Du er ikke logget ind i LH Budget.');
+    await lhAlert('Du er ikke logget ind i LH Budget.');
     return;
   }
 
@@ -328,7 +328,7 @@ async function openCustomBudget(id){
     .single();
 
   if(b.error){
-    alert('Budget kunne ikke åbnes.\n\n' + b.error.message);
+    await lhAlert('Budget kunne ikke åbnes.\n\n' + b.error.message);
     return;
   }
 
@@ -355,8 +355,8 @@ async function loadCustomBudgetData(){
     .eq('user_id', user.id)
     .order('sort_order', {ascending:true});
 
-  if(s.error){ alert('Sektioner kunne ikke hentes.\n\n' + s.error.message); return; }
-  if(i.error){ alert('Linjer kunne ikke hentes.\n\n' + i.error.message); return; }
+  if(s.error){ await lhAlert('Sektioner kunne ikke hentes.\n\n' + s.error.message); return; }
+  if(i.error){ await lhAlert('Linjer kunne ikke hentes.\n\n' + i.error.message); return; }
 
   customSections = s.data || [];
   customItems = i.data || [];
@@ -428,7 +428,7 @@ function escapeHtml(str){
 
 async function addCustomSection(){
   if(!customBudgetId) return;
-  const title = prompt('Navn på sektion?');
+  const title = await lhPrompt('Navn på sektion?');
   if(!title) return;
 
   const order = customSections.length + 1;
@@ -451,7 +451,7 @@ async function addCustomItem(sectionId){
 }
 
 async function deleteCustomItem(id){
-  if(!confirm('Slet linjen?')) return;
+  if(!(await lhConfirm('Slet linjen?'))) return;
   const {error} = await sb.from('custom_budget_items').delete().eq('id', id).eq('user_id', user.id);
   if(error){ showError(error.message); return; }
   await loadCustomBudgetData();
@@ -459,7 +459,7 @@ async function deleteCustomItem(id){
 }
 
 async function deleteCustomSection(id){
-  if(!confirm('Slet sektion og alle linjer?')) return;
+  if(!(await lhConfirm('Slet sektion og alle linjer?'))) return;
   const {error} = await sb.from('custom_budget_sections').delete().eq('id', id).eq('user_id', user.id);
   if(error){ showError(error.message); return; }
   await loadCustomBudgetData();
@@ -468,7 +468,7 @@ async function deleteCustomSection(id){
 
 async function deleteCurrentCustomBudget(){
   if(!customBudgetId) return;
-  if(!confirm('Slet hele budgettet?')) return;
+  if(!(await lhConfirm('Slet hele budgettet?'))) return;
   const {error} = await sb.from('custom_budgets').delete().eq('id', customBudgetId).eq('user_id', user.id);
   if(error){ showError(error.message); return; }
   closeCustomBudget();
@@ -498,4 +498,102 @@ window.addEventListener('load',()=>{
     if(!customBudgetId) return;
     await sb.from('custom_budgets').update({title:$('customBudgetTitle').value}).eq('id', customBudgetId).eq('user_id', user.id);
   });
+});
+
+
+
+/* v5.3 LH dialog + refresh */
+function lhPrompt(message, defaultValue=''){
+  return new Promise(resolve=>{
+    const box = $('lhDialog');
+    $('lhDialogTitle').textContent = 'LH Budget';
+    $('lhDialogMessage').textContent = message;
+    $('lhDialogInput').classList.remove('hidden');
+    $('lhDialogInput').value = defaultValue || '';
+    $('lhDialogCancel').classList.remove('hidden');
+    box.classList.remove('hidden');
+
+    setTimeout(()=>$('lhDialogInput').focus(), 50);
+
+    const cleanup = (value)=>{
+      box.classList.add('hidden');
+      $('lhDialogOk').onclick = null;
+      $('lhDialogCancel').onclick = null;
+      resolve(value);
+    };
+
+    $('lhDialogOk').onclick = ()=>cleanup($('lhDialogInput').value);
+    $('lhDialogCancel').onclick = ()=>cleanup(null);
+  });
+}
+
+function lhConfirm(message){
+  return new Promise(resolve=>{
+    const box = $('lhDialog');
+    $('lhDialogTitle').textContent = 'LH Budget';
+    $('lhDialogMessage').textContent = message;
+    $('lhDialogInput').classList.add('hidden');
+    $('lhDialogCancel').classList.remove('hidden');
+    box.classList.remove('hidden');
+
+    const cleanup = (value)=>{
+      box.classList.add('hidden');
+      $('lhDialogOk').onclick = null;
+      $('lhDialogCancel').onclick = null;
+      resolve(value);
+    };
+
+    $('lhDialogOk').onclick = ()=>cleanup(true);
+    $('lhDialogCancel').onclick = ()=>cleanup(false);
+  });
+}
+
+function lhAlert(message){
+  return new Promise(resolve=>{
+    const box = $('lhDialog');
+    $('lhDialogTitle').textContent = 'LH Budget';
+    $('lhDialogMessage').textContent = message;
+    $('lhDialogInput').classList.add('hidden');
+    $('lhDialogCancel').classList.add('hidden');
+    box.classList.remove('hidden');
+
+    $('lhDialogOk').onclick = ()=>{
+      box.classList.add('hidden');
+      $('lhDialogOk').onclick = null;
+      resolve();
+    };
+  });
+}
+
+async function refreshCurrentView(){
+  try{
+    if(customBudgetId){
+      await loadCustomBudgetData();
+      renderCustomBudget();
+      return;
+    }
+
+    if($('sideMenu') && !$('sideMenu').classList.contains('hidden')){
+      await loadCustomBudgetList();
+      return;
+    }
+
+    if(typeof loadMonth === 'function'){
+      await loadMonth();
+    }
+  }catch(e){
+    console.error(e);
+  }
+}
+
+
+window.addEventListener('load',()=>{
+  const buttons = document.querySelectorAll('.topbar .icon-btn');
+  const refreshBtn = buttons[buttons.length - 1];
+  if(refreshBtn){
+    refreshBtn.onclick = async (e)=>{
+      e.preventDefault();
+      await refreshCurrentView();
+    };
+  }
 });
