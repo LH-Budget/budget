@@ -94,7 +94,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v5.7';
+const VERSION='v5.8';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -446,6 +446,10 @@ function renderCustomBudget(){
 
     card.innerHTML = `
       <div class="custom-card-head">
+        <label class="section-include-wrap" title="Med i samlet total">
+          <input class="section-include" type="checkbox" ${section.include_in_total !== false ? 'checked' : ''}>
+          <span>✓</span>
+        </label>
         <input class="section-title" value="${escapeHtml(section.title || '')}">
         <button class="section-add">+ Linje</button>
         <button class="section-del">×</button>
@@ -458,6 +462,18 @@ function renderCustomBudget(){
     titleInput.onchange = async ()=>{
       await sb.from('custom_budget_sections').update({title:titleInput.value}).eq('id', section.id).eq('user_id', user.id);
     };
+
+    const includeInput = card.querySelector('.section-include');
+    if(includeInput){
+      includeInput.onchange = async ()=>{
+        section.include_in_total = includeInput.checked;
+        await sb.from('custom_budget_sections')
+          .update({include_in_total: includeInput.checked})
+          .eq('id', section.id)
+          .eq('user_id', user.id);
+        updateCustomGrandTotal();
+      };
+    }
 
     card.querySelector('.section-add').onclick = ()=>addCustomItem(section.id);
     card.querySelector('.section-del').onclick = ()=>deleteCustomSection(section.id);
@@ -506,7 +522,7 @@ async function addCustomSection(){
 
   const order = customSections.length + 1;
   const {error} = await sb.from('custom_budget_sections')
-    .insert({user_id:user.id,budget_id:customBudgetId,title:title.trim(),sort_order:order});
+    .insert({user_id:user.id,budget_id:customBudgetId,title:title.trim(),sort_order:order,include_in_total:true});
   if(error){ showError(error.message); return; }
 
   await loadCustomBudgetData();
@@ -612,7 +628,16 @@ function updateCustomGrandTotal(){
   const box = $('customGrandTotal');
   if(!box) return;
 
-  const total = (customItems || []).reduce((sum, item)=>sum + Number(item.amount || 0), 0);
+  const includedSectionIds = new Set(
+    (customSections || [])
+      .filter(section => section.include_in_total !== false)
+      .map(section => section.id)
+  );
+
+  const total = (customItems || [])
+    .filter(item => includedSectionIds.has(item.section_id))
+    .reduce((sum, item)=>sum + Number(item.amount || 0), 0);
+
   const strong = box.querySelector('strong');
   if(strong) strong.textContent = customMoney(total);
 }
