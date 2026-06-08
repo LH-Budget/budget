@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.5 PWA iPhone home-screen fix */
+/* v4.6 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v4.5: keep flex layout, use all available screen in iPhone PWA */
+/* v4.6: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.5 logo + version placement */
+/* v4.6 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.5: integrated SVG logo, matching app background, and lifted bottom row */
+/* v4.6: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.5 small logo/version fix */
+/* v4.6 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.5 smaller top logo only */
+/* v4.6 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.5: place Tilføj + Overfør side by side */
+/* v4.6: place Tilføj + Overfør side by side */
 .action-row{
   position:absolute!important;
   top:5px!important;
@@ -680,7 +680,28 @@ button,input,select{font:inherit}
 }
 
 
-/* v4.5: no auto overwrite of Overført fra, no minus button */
+/* v4.6: no auto overwrite of Overført fra, no minus button */
 .minus-btn,#openingMinusBtn{display:none!important;}
 
-/* v4.5: chain propagation of Overført fra */
+/* v4.6: chain propagation of Overført fra */
+
+
+/* v4.6: grøn ramme omkring I ALT i Lønkonto minus udgifter */
+.balance-panel .total strong{
+  display:inline-block!important;
+  justify-self:end!important;
+  min-width:116px!important;
+  padding:3px 10px!important;
+  border:1px solid rgba(94,225,90,.75)!important;
+  border-radius:12px!important;
+  background:rgba(94,225,90,.08)!important;
+  box-shadow:0 0 10px rgba(94,225,90,.16)!important;
+  color:var(--green)!important;
+  text-align:right!important;
+}
+.balance-panel .total strong.negative{
+  border-color:rgba(255,85,85,.75)!important;
+  background:rgba(255,85,85,.08)!important;
+  box-shadow:0 0 10px rgba(255,85,85,.16)!important;
+  color:var(--red)!important;
+}
