@@ -23,7 +23,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v5.5';
+const VERSION='v5.6';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -420,6 +420,8 @@ function renderCustomBudget(){
 
     root.appendChild(card);
   });
+
+  updateCustomGrandTotal();
 }
 
 function escapeHtml(str){
@@ -533,3 +535,13 @@ window.addEventListener('load',()=>{
     };
   }
 });
+
+
+function updateCustomGrandTotal(){
+  const box = $('customGrandTotal');
+  if(!box) return;
+
+  const total = (customItems || []).reduce((sum, item)=>sum + Number(item.amount || 0), 0);
+  const strong = box.querySelector('strong');
+  if(strong) strong.textContent = customMoney(total);
+}
