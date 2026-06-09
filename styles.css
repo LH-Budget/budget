@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2 PWA iPhone home-screen fix */
+/* v6.3 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v6.2: keep flex layout, use all available screen in iPhone PWA */
+/* v6.3: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2 logo + version placement */
+/* v6.3 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2: integrated SVG logo, matching app background, and lifted bottom row */
+/* v6.3: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2 small logo/version fix */
+/* v6.3 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2 smaller top logo only */
+/* v6.3 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2: place Tilføj + Overfør side by side */
+/* v6.3: place Tilføj + Overfør side by side */
 .action-row{
   position:absolute!important;
   top:5px!important;
@@ -680,13 +680,13 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2: no auto overwrite of Overført fra, no minus button */
+/* v6.3: no auto overwrite of Overført fra, no minus button */
 .minus-btn,#openingMinusBtn{display:none!important;}
 
-/* v6.2: chain propagation of Overført fra */
+/* v6.3: chain propagation of Overført fra */
 
 
-/* v6.2 custom budgets */
+/* v6.3 custom budgets */
 .side-menu.hidden,.custom-view.hidden{display:none!important;}
 .side-menu{position:fixed;inset:0;z-index:1000;}
 .side-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);}
@@ -759,7 +759,7 @@ button,input,select{font:inherit}
 .custom-actions button{width:100%;height:38px;font-size:14px;font-weight:700;}
 
 
-/* v6.2 status line */
+/* v6.3 status line */
 .custom-status{
   min-height:18px;
   color:#ff5555;
@@ -768,7 +768,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2 samlet total på custom-budgetter */
+/* v6.3 samlet total på custom-budgetter */
 .custom-grand-total{
   flex:0 0 auto;
   display:grid;
@@ -795,7 +795,7 @@ button,input,select{font:inherit}
   text-align:right;
 }
 
-/* v6.2 LH custom dialog */
+/* v6.3 LH custom dialog */
 .lh-dialog.hidden{display:none!important;}
 .lh-dialog{
   position:fixed;
@@ -874,7 +874,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2: flueben for sektion med i samlet total */
+/* v6.3: flueben for sektion med i samlet total */
 .custom-card-head{
   grid-template-columns:34px 1fr 64px 30px!important;
 }
@@ -906,7 +906,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2 - kun iPhone: ca. 15% større tekst og bedre trykflader */
+/* v6.3 - kun iPhone: ca. 15% større tekst og bedre trykflader */
 @media (max-width: 759px) and (hover: none) and (pointer: coarse) {
   .screen{ gap:4px!important; }
 
@@ -992,7 +992,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v6.2 - kun iPhone custom-budget sider */
+/* v6.3 - kun iPhone custom-budget sider */
 @media (max-width: 759px) and (hover: none) and (pointer: coarse) {
   .custom-title-input{ font-size:21px!important; }
 
@@ -1029,30 +1029,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.2 + Budget under Udgifter */
-.budget-expense-btn{
-  position:absolute!important;
-  top:5px!important;
-  right:72px!important;
-  height:18px!important;
-  min-height:18px!important;
-  line-height:16px!important;
-  padding:0 6px!important;
-  border:1px solid rgba(217,183,101,.32)!important;
-  border-radius:7px!important;
-  background:#080808!important;
-  color:#c8b372!important;
-  font-size:9.7px!important;
-  white-space:nowrap!important;
-  z-index:5!important;
-}
-.expense-panel .action-row{
-  right:7px!important;
-}
-.expense-panel .panel-title{
-  padding-right:200px!important;
-}
-
+/* v6.3 + Budget under Udgifter */
 .budget-picker-dialog{
   position:fixed;
   inset:0;
@@ -1112,14 +1089,87 @@ button,input,select{font:inherit}
   font-weight:800;
 }
 @media (max-width:759px) and (hover:none) and (pointer:coarse){
-  .budget-expense-btn{
+  }
+
+
+/* v6.3: korrekt knaprække i UDGIFTER */
+.expense-panel{
+  position:relative!important;
+}
+
+.expense-panel .action-row,
+.expense-panel .panel-actions{
+  position:absolute!important;
+  top:5px!important;
+  right:7px!important;
+  display:flex!important;
+  flex-direction:row!important;
+  gap:4px!important;
+  align-items:center!important;
+  z-index:10!important;
+}
+
+.expense-panel .budget-expense-btn{
+  position:absolute!important;
+  top:5px!important;
+  right:158px!important;
+  z-index:11!important;
+}
+
+.expense-panel .add-btn,
+.expense-panel .transfer-btn,
+.expense-panel .budget-expense-btn{
+  height:20px!important;
+  min-height:20px!important;
+  line-height:18px!important;
+  padding:0 7px!important;
+  border:1px solid rgba(217,183,101,.32)!important;
+  border-radius:7px!important;
+  background:#080808!important;
+  color:#c8b372!important;
+  font-size:10.5px!important;
+  white-space:nowrap!important;
+  width:auto!important;
+}
+
+.expense-panel .panel-title{
+  padding-right:235px!important;
+}
+
+@media (max-width:759px) and (hover:none) and (pointer:coarse){
+  .expense-panel .action-row,
+  .expense-panel .panel-actions{
+    top:5px!important;
+    right:7px!important;
+    gap:3px!important;
+  }
+
+  .expense-panel .budget-expense-btn{
+    top:5px!important;
+    right:164px!important;
+  }
+
+  .expense-panel .add-btn,
+  .expense-panel .transfer-btn,
+  .expense-panel .budget-expense-btn{
     height:22px!important;
     min-height:22px!important;
     line-height:20px!important;
     font-size:11.5px!important;
-    right:82px!important;
+    padding:0 6px!important;
+  }
+
+  .expense-panel .panel-title{
+    padding-right:245px!important;
+    font-size:15.5px!important;
+  }
+}
+
+@media (min-width:760px){
+  .expense-panel .budget-expense-btn{
+    right:185px!important;
   }
   .expense-panel .panel-title{
-    padding-right:220px!important;
+    padding-right:270px!important;
   }
 }
