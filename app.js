@@ -94,7 +94,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v6.0';
+const VERSION='v6.1';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -644,7 +644,7 @@ function updateCustomGrandTotal(){
 
 
 
-/* v6.0 add custom budget as expense */
+/* v6.1 add custom budget as expense */
 async function getCustomBudgetTotalForExpense(budgetId){
   const sectionsRes = await sb.from('custom_budget_sections')
     .select('id,include_in_total')
