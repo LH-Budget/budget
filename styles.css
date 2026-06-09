@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8 PWA iPhone home-screen fix */
+/* v5.9 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v5.8: keep flex layout, use all available screen in iPhone PWA */
+/* v5.9: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8 logo + version placement */
+/* v5.9 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8: integrated SVG logo, matching app background, and lifted bottom row */
+/* v5.9: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8 small logo/version fix */
+/* v5.9 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8 smaller top logo only */
+/* v5.9 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8: place Tilføj + Overfør side by side */
+/* v5.9: place Tilføj + Overfør side by side */
 .action-row{
   position:absolute!important;
   top:5px!important;
@@ -680,13 +680,13 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8: no auto overwrite of Overført fra, no minus button */
+/* v5.9: no auto overwrite of Overført fra, no minus button */
 .minus-btn,#openingMinusBtn{display:none!important;}
 
-/* v5.8: chain propagation of Overført fra */
+/* v5.9: chain propagation of Overført fra */
 
 
-/* v5.8 custom budgets */
+/* v5.9 custom budgets */
 .side-menu.hidden,.custom-view.hidden{display:none!important;}
 .side-menu{position:fixed;inset:0;z-index:1000;}
 .side-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);}
@@ -759,7 +759,7 @@ button,input,select{font:inherit}
 .custom-actions button{width:100%;height:38px;font-size:14px;font-weight:700;}
 
 
-/* v5.8 status line */
+/* v5.9 status line */
 .custom-status{
   min-height:18px;
   color:#ff5555;
@@ -768,7 +768,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8 samlet total på custom-budgetter */
+/* v5.9 samlet total på custom-budgetter */
 .custom-grand-total{
   flex:0 0 auto;
   display:grid;
@@ -795,7 +795,7 @@ button,input,select{font:inherit}
   text-align:right;
 }
 
-/* v5.8 LH custom dialog */
+/* v5.9 LH custom dialog */
 .lh-dialog.hidden{display:none!important;}
 .lh-dialog{
   position:fixed;
@@ -874,7 +874,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.8: flueben for sektion med i samlet total */
+/* v5.9: flueben for sektion med i samlet total */
 .custom-card-head{
   grid-template-columns:34px 1fr 64px 30px!important;
 }
@@ -903,4 +903,127 @@ button,input,select{font:inherit}
 .section-include-wrap input:checked + span{
   opacity:1;
   color:var(--green);
+}
+
+
+/* v5.9 - kun iPhone: ca. 15% større tekst og bedre trykflader */
+@media (max-width: 759px) and (hover: none) and (pointer: coarse) {
+  .screen{ gap:4px!important; }
+
+  .panel{
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+
+  .panel-title{
+    font-size:15.5px!important;
+    line-height:19px!important;
+    letter-spacing:.5px!important;
+  }
+
+  .balance-panel .panel-title{
+    font-size:14.2px!important;
+    letter-spacing:.35px!important;
+  }
+
+  .line,
+  .fixed-line,
+  .item-row{
+    min-height:27px!important;
+    font-size:18px!important;
+  }
+
+  input,
+  select,
+  button{
+    font-size:18px!important;
+  }
+
+  .item-row input,
+  .line input{
+    height:26px!important;
+    font-size:18px!important;
+  }
+
+  .amount,
+  .item-row .amount,
+  .line .amount,
+  input.amount{
+    font-size:18px!important;
+  }
+
+  .total,
+  .section-total{
+    font-size:18px!important;
+  }
+
+  .total strong,
+  .total .value,
+  .panel .total strong{
+    font-size:23px!important;
+    line-height:25px!important;
+  }
+
+  .add-btn,
+  .transfer-btn,
+  .action-row .add-btn,
+  .action-row .transfer-btn{
+    height:22px!important;
+    min-height:22px!important;
+    line-height:20px!important;
+    font-size:11.5px!important;
+    padding:0 7px!important;
+  }
+
+  .month-tab{ font-size:17px!important; }
+  .month-arrow{ font-size:25px!important; }
+
+  .year-row,
+  .year-row select{
+    font-size:18px!important;
+  }
+
+  .income-panel{flex:1.75 1 0!important;}
+  .balance-panel{flex:1.55 1 0!important;}
+  .expense-panel{flex:3.45 1 0!important;}
+
+  .version,.app-version{
+    font-size:11px!important;
+  }
+}
+
+/* v5.9 - kun iPhone custom-budget sider */
+@media (max-width: 759px) and (hover: none) and (pointer: coarse) {
+  .custom-title-input{ font-size:21px!important; }
+
+  .custom-card{ padding:12px!important; }
+
+  .section-title{ font-size:20px!important; }
+
+  .custom-line{
+    grid-template-columns:minmax(0,1fr) 118px 28px!important;
+  }
+
+  .custom-line input{
+    height:32px!important;
+    font-size:18px!important;
+  }
+
+  .section-total{ font-size:18px!important; }
+  .section-total strong{ font-size:22px!important; }
+
+  .custom-grand-total span{ font-size:18px!important; }
+  .custom-grand-total strong{ font-size:31px!important; }
+
+  .section-add,
+  .section-del,
+  .custom-actions button{
+    height:34px!important;
+    font-size:15px!important;
+  }
+
+  .section-include-wrap{
+    width:34px!important;
+    height:34px!important;
+  }
 }
