@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1 PWA iPhone home-screen fix */
+/* v6.2 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v6.1: keep flex layout, use all available screen in iPhone PWA */
+/* v6.2: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1 logo + version placement */
+/* v6.2 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1: integrated SVG logo, matching app background, and lifted bottom row */
+/* v6.2: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1 small logo/version fix */
+/* v6.2 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1 smaller top logo only */
+/* v6.2 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1: place Tilføj + Overfør side by side */
+/* v6.2: place Tilføj + Overfør side by side */
 .action-row{
   
   top:5px!important;
@@ -680,13 +680,13 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1: no auto overwrite of Overført fra, no minus button */
+/* v6.2: no auto overwrite of Overført fra, no minus button */
 .minus-btn,#openingMinusBtn{display:none!important;}
 
-/* v6.1: chain propagation of Overført fra */
+/* v6.2: chain propagation of Overført fra */
 
 
-/* v6.1 custom budgets */
+/* v6.2 custom budgets */
 .side-menu.hidden,.custom-view.hidden{display:none!important;}
 .side-menu{position:fixed;inset:0;z-index:1000;}
 .side-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);}
@@ -759,7 +759,7 @@ button,input,select{font:inherit}
 .custom-actions button{width:100%;height:38px;font-size:14px;font-weight:700;}
 
 
-/* v6.1 status line */
+/* v6.2 status line */
 .custom-status{
   min-height:18px;
   color:#ff5555;
@@ -768,7 +768,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1 samlet total på custom-budgetter */
+/* v6.2 samlet total på custom-budgetter */
 .custom-grand-total{
   flex:0 0 auto;
   display:grid;
@@ -795,7 +795,7 @@ button,input,select{font:inherit}
   text-align:right;
 }
 
-/* v6.1 LH custom dialog */
+/* v6.2 LH custom dialog */
 .lh-dialog.hidden{display:none!important;}
 .lh-dialog{
   position:fixed;
@@ -874,7 +874,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1: flueben for sektion med i samlet total */
+/* v6.2: flueben for sektion med i samlet total */
 .custom-card-head{
   grid-template-columns:34px 1fr 64px 30px!important;
 }
@@ -906,7 +906,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1 - kun iPhone: ca. 15% større tekst og bedre trykflader */
+/* v6.2 - kun iPhone: ca. 15% større tekst og bedre trykflader */
 @media (max-width: 759px) and (hover: none) and (pointer: coarse) {
   .screen{ gap:4px!important; }
 
@@ -992,7 +992,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v6.1 - kun iPhone custom-budget sider */
+/* v6.2 - kun iPhone custom-budget sider */
 @media (max-width: 759px) and (hover: none) and (pointer: coarse) {
   .custom-title-input{ font-size:21px!important; }
 
@@ -1029,11 +1029,11 @@ button,input,select{font:inherit}
 }
 
 
-/* v6.1 + Budget under Udgifter */
+/* v6.2 + Budget under Udgifter */
 .budget-expense-btn{
   
   top:5px!important;
-  right:72px!important;
+  right:160px;
   height:18px!important;
   min-height:18px!important;
   line-height:16px!important;
@@ -1050,7 +1050,7 @@ button,input,select{font:inherit}
   right:7px!important;
 }
 .expense-panel .panel-title{
-  padding-right:200px!important;
+  padding-right:280px!important;
 }
 
 .budget-picker-dialog{
@@ -1117,9 +1117,9 @@ button,input,select{font:inherit}
     min-height:22px!important;
     line-height:20px!important;
     font-size:11.5px!important;
-    right:82px!important;
+    right:160px;
   }
   .expense-panel .panel-title{
-    padding-right:220px!important;
+    padding-right:280px!important;
   }
 }
