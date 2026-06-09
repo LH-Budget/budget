@@ -94,7 +94,7 @@ function parseAmountLoose(value){
   return Number.isFinite(n) ? n : 0;
 }
 
-const VERSION='v5.9';
+const VERSION='v6.0';
 const SUPABASE_URL='https://oudjjqvhvgxouoanqvjb.supabase.co';
 const SUPABASE_KEY='sb_publishable_vXbOB_8s8GJVWaJMR5eF8w_R2Dl3WPQ';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
@@ -641,3 +641,138 @@ function updateCustomGrandTotal(){
   const strong = box.querySelector('strong');
   if(strong) strong.textContent = customMoney(total);
 }
+
+
+
+/* v6.0 add custom budget as expense */
+async function getCustomBudgetTotalForExpense(budgetId){
+  const sectionsRes = await sb.from('custom_budget_sections')
+    .select('id,include_in_total')
+    .eq('user_id', user.id)
+    .eq('budget_id', budgetId);
+
+  if(sectionsRes.error){
+    await lhAlert('Budget-sektioner kunne ikke hentes.\n\n' + sectionsRes.error.message);
+    return null;
+  }
+
+  const includedIds = new Set((sectionsRes.data || [])
+    .filter(s => s.include_in_total !== false)
+    .map(s => s.id));
+
+  const itemsRes = await sb.from('custom_budget_items')
+    .select('section_id,amount')
+    .eq('user_id', user.id)
+    .eq('budget_id', budgetId);
+
+  if(itemsRes.error){
+    await lhAlert('Budget-linjer kunne ikke hentes.\n\n' + itemsRes.error.message);
+    return null;
+  }
+
+  return (itemsRes.data || [])
+    .filter(item => includedIds.has(item.section_id))
+    .reduce((sum,item)=>sum + Number(item.amount || 0), 0);
+}
+
+async function chooseCustomBudgetForExpense(){
+  if(!user){
+    await lhAlert('Du er ikke logget ind.');
+    return;
+  }
+
+  const res = await sb.from('custom_budgets')
+    .select('id,title')
+    .eq('user_id', user.id)
+    .order('created_at', {ascending:false});
+
+  if(res.error){
+    await lhAlert('Budgetter kunne ikke hentes.\n\n' + res.error.message);
+    return;
+  }
+
+  const budgets = res.data || [];
+  if(!budgets.length){
+    await lhAlert('Der er ingen budgetter at vælge.');
+    return;
+  }
+
+  // Simpel liste med egne LH-dialoger. Brug nummer for at undgå Safari prompt.
+  await showBudgetPickerDialog(budgets);
+}
+
+function showBudgetPickerDialog(budgets){
+  return new Promise(resolve=>{
+    let existing = document.getElementById('budgetPickerDialog');
+    if(existing) existing.remove();
+
+    const wrap = document.createElement('div');
+    wrap.id = 'budgetPickerDialog';
+    wrap.className = 'budget-picker-dialog';
+    wrap.innerHTML = `
+      <div class="budget-picker-backdrop"></div>
+      <div class="budget-picker-card">
+        <div class="budget-picker-title">Vælg budget</div>
+        <div class="budget-picker-list"></div>
+        <button class="budget-picker-cancel">Annuller</button>
+      </div>
+    `;
+
+    document.body.appendChild(wrap);
+
+    const list = wrap.querySelector('.budget-picker-list');
+    budgets.forEach(b=>{
+      const btn = document.createElement('button');
+      btn.className = 'budget-picker-item';
+      btn.textContent = b.title || 'Uden navn';
+      btn.onclick = async ()=>{
+        wrap.remove();
+        await addSelectedBudgetAsExpense(b);
+        resolve();
+      };
+      list.appendChild(btn);
+    });
+
+    wrap.querySelector('.budget-picker-cancel').onclick = ()=>{
+      wrap.remove();
+      resolve();
+    };
+  });
+}
+
+async function addSelectedBudgetAsExpense(budget){
+  const total = await getCustomBudgetTotalForExpense(budget.id);
+  if(total === null) return;
+
+  const key = monthKey(year, month);
+  const nextOrder = (items || []).filter(x=>x.section === 'expense').length + 1;
+
+  const insertRes = await sb.from('budget_items').insert({
+    user_id: user.id,
+    month_key: key,
+    year: year,
+    month: month,
+    section: 'expense',
+    label: budget.title || 'Budget',
+    amount: total,
+    sort_order: nextOrder
+  });
+
+  if(insertRes.error){
+    await lhAlert('Budget kunne ikke tilføjes som udgift.\n\n' + insertRes.error.message);
+    return;
+  }
+
+  await loadMonth();
+}
+
+
+window.addEventListener('load',()=>{
+  const btn = document.getElementById('addBudgetExpense');
+  if(btn){
+    btn.onclick = async (e)=>{
+      e.preventDefault();
+      await chooseCustomBudgetForExpense();
+    };
+  }
+});

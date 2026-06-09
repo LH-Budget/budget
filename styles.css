@@ -366,7 +366,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9 PWA iPhone home-screen fix */
+/* v6.0 PWA iPhone home-screen fix */
 @supports (-webkit-touch-callout: none) {
   html, body {
     height: -webkit-fill-available !important;
@@ -418,7 +418,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v5.9: keep flex layout, use all available screen in iPhone PWA */
+/* v6.0: keep flex layout, use all available screen in iPhone PWA */
 @media (max-width:759px){
   .budget-view{
     display:flex!important;
@@ -471,7 +471,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9 logo + version placement */
+/* v6.0 logo + version placement */
 .logo-img{
   display:block;
   object-fit:contain;
@@ -524,7 +524,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9: integrated SVG logo, matching app background, and lifted bottom row */
+/* v6.0: integrated SVG logo, matching app background, and lifted bottom row */
 .logo-img,.login-logo,.top-logo-img{display:none!important;}
 
 .lh-logo{
@@ -617,7 +617,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9 small logo/version fix */
+/* v6.0 small logo/version fix */
 .top-lh-logo{
   height:72px !important;
   margin-top:-6px !important;
@@ -628,7 +628,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9 smaller top logo only */
+/* v6.0 smaller top logo only */
 .top-lh-logo{
   width:78px !important;
   height:40px !important;
@@ -636,7 +636,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9: place Tilføj + Overfør side by side */
+/* v6.0: place Tilføj + Overfør side by side */
 .action-row{
   position:absolute!important;
   top:5px!important;
@@ -680,13 +680,13 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9: no auto overwrite of Overført fra, no minus button */
+/* v6.0: no auto overwrite of Overført fra, no minus button */
 .minus-btn,#openingMinusBtn{display:none!important;}
 
-/* v5.9: chain propagation of Overført fra */
+/* v6.0: chain propagation of Overført fra */
 
 
-/* v5.9 custom budgets */
+/* v6.0 custom budgets */
 .side-menu.hidden,.custom-view.hidden{display:none!important;}
 .side-menu{position:fixed;inset:0;z-index:1000;}
 .side-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);}
@@ -759,7 +759,7 @@ button,input,select{font:inherit}
 .custom-actions button{width:100%;height:38px;font-size:14px;font-weight:700;}
 
 
-/* v5.9 status line */
+/* v6.0 status line */
 .custom-status{
   min-height:18px;
   color:#ff5555;
@@ -768,7 +768,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9 samlet total på custom-budgetter */
+/* v6.0 samlet total på custom-budgetter */
 .custom-grand-total{
   flex:0 0 auto;
   display:grid;
@@ -795,7 +795,7 @@ button,input,select{font:inherit}
   text-align:right;
 }
 
-/* v5.9 LH custom dialog */
+/* v6.0 LH custom dialog */
 .lh-dialog.hidden{display:none!important;}
 .lh-dialog{
   position:fixed;
@@ -874,7 +874,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9: flueben for sektion med i samlet total */
+/* v6.0: flueben for sektion med i samlet total */
 .custom-card-head{
   grid-template-columns:34px 1fr 64px 30px!important;
 }
@@ -906,7 +906,7 @@ button,input,select{font:inherit}
 }
 
 
-/* v5.9 - kun iPhone: ca. 15% større tekst og bedre trykflader */
+/* v6.0 - kun iPhone: ca. 15% større tekst og bedre trykflader */
 @media (max-width: 759px) and (hover: none) and (pointer: coarse) {
   .screen{ gap:4px!important; }
 
@@ -992,7 +992,7 @@ button,input,select{font:inherit}
   }
 }
 
-/* v5.9 - kun iPhone custom-budget sider */
+/* v6.0 - kun iPhone custom-budget sider */
 @media (max-width: 759px) and (hover: none) and (pointer: coarse) {
   .custom-title-input{ font-size:21px!important; }
 
@@ -1025,5 +1025,101 @@ button,input,select{font:inherit}
   .section-include-wrap{
     width:34px!important;
     height:34px!important;
+  }
+}
+
+
+/* v6.0 + Budget under Udgifter */
+.budget-expense-btn{
+  position:absolute!important;
+  top:5px!important;
+  right:72px!important;
+  height:18px!important;
+  min-height:18px!important;
+  line-height:16px!important;
+  padding:0 6px!important;
+  border:1px solid rgba(217,183,101,.32)!important;
+  border-radius:7px!important;
+  background:#080808!important;
+  color:#c8b372!important;
+  font-size:9.7px!important;
+  white-space:nowrap!important;
+  z-index:5!important;
+}
+.expense-panel .action-row{
+  right:7px!important;
+}
+.expense-panel .panel-title{
+  padding-right:200px!important;
+}
+
+.budget-picker-dialog{
+  position:fixed;
+  inset:0;
+  z-index:3200;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+}
+.budget-picker-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(4px);
+}
+.budget-picker-card{
+  position:relative;
+  width:min(380px,92vw);
+  max-height:78vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  border:1px solid rgba(217,183,101,.34);
+  border-radius:22px;
+  background:linear-gradient(180deg,#141515,#070808);
+  box-shadow:0 28px 90px rgba(0,0,0,.65);
+  padding:20px;
+}
+.budget-picker-title{
+  color:var(--gold);
+  font-size:22px;
+  font-weight:800;
+}
+.budget-picker-list{
+  min-height:0;
+  overflow-y:auto;
+  display:grid;
+  gap:8px;
+}
+.budget-picker-item{
+  min-height:42px;
+  border-radius:12px;
+  border:1px solid #303030;
+  background:#090909;
+  color:var(--text);
+  text-align:left;
+  padding:0 12px;
+  font-size:16px;
+}
+.budget-picker-cancel{
+  height:42px;
+  border-radius:13px;
+  border:1px solid #383838;
+  background:#0a0a0a;
+  color:#cfc7b6;
+  font-weight:800;
+}
+@media (max-width:759px) and (hover:none) and (pointer:coarse){
+  .budget-expense-btn{
+    height:22px!important;
+    min-height:22px!important;
+    line-height:20px!important;
+    font-size:11.5px!important;
+    right:82px!important;
+  }
+  .expense-panel .panel-title{
+    padding-right:220px!important;
   }
 }
