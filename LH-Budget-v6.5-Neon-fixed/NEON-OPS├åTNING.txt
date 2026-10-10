@@ -1,0 +1,14 @@
+LH Budget v6.5 – Neon backend
+
+Denne version er gjort klar til Vercel + Neon. GitHub Pages alene kan ikke køre backend-koden.
+
+Vercel environment variables (sæt dem i Vercel Project Settings → Environment Variables):
+DATABASE_URL = Neon connection string (brug pooled connection string)
+LH_LOGIN_EMAIL = din ønskede login-email
+LH_LOGIN_PASSWORD = vælg en ny adgangskode til LH Budget
+LH_USER_ID = det user_id, dine importerede data bruger
+SESSION_SECRET = en lang tilfældig hemmelig værdi
+
+VIGTIGT: Frontenden skal hostes på Vercel sammen med /api. Hvis den fortsat hostes på GitHub Pages, kan /api ikke fungere.
+
+Før brug: kontrollér at kolonnerne i Neon svarer til Supabase-tabellerne, og at imported data har samme LH_USER_ID. Login er erstattet af env-baseret login.
