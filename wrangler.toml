@@ -1,3 +1,8 @@
 name = "lh-budget"
 pages_build_output_dir = "."
 compatibility_date = "2026-10-11"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "lh-budget"
+database_id = "45d812a8-f105-44d8-8228-e4f17d06f19d"
