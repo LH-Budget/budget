@@ -1,4 +1,4 @@
-LH Budget v6.5 – Neon backend
+LH Budget v6.6 – Neon backend
 
 Denne version er gjort klar til Vercel + Neon. GitHub Pages alene kan ikke køre backend-koden.
 
